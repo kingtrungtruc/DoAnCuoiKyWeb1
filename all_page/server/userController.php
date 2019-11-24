@@ -50,7 +50,7 @@
                 $data = db::$connectionstring->prepare($sqlSelect);
 
                 //nếu truy vấn được thì trả về user
-                if($data->execute([$id, $username])){
+                if($data->execute(array($id, $username))){
                     return $data->fetch(PDO::FETCH_ASSOC);
                 }
                 //mặc định sẽ có lỗi
@@ -97,7 +97,7 @@
                 //dùng biến static của class <class name>::<tên biến>
                 $data = db::$connectionstring->prepare($sqlUpdate);
                 //nếu update được thì trả về 1 
-                if($data->execute([$userSelect['username']])){
+                if($data->execute($userSelect['username'])){
                     //gọi hàm setCookie bên trên để đặt lại thời gian cho cookie
                     if($this->setCookie($userSelect['username'], $userSelect['realname'])){
                         return 1;
@@ -210,6 +210,85 @@
                 //throw để lớp kế thừa có thể gọi được
                 throw new PDOException($ex->getMessage());
             }
+        }
+
+        //tìm bản ghi đăng ký bằng email và token
+        public function findRegisterByEmailAndToken($email, $token){
+            //kiểm tra email hoặc token có rỗng hay không
+            if(empty($email) || empty($token)){
+                return null;
+            }
+
+            try{
+                $sqlSelect = "SELECT * FROM register WHERE username = ? AND token = ?";
+                //dùng biến static của class <class name>::<tên biến>
+                $data = db::$connectionstring->prepare($sqlSelect);
+
+                //nếu execute thành công trả về bản ghi đó
+                if($data->execute(array($email, $token))){
+                    return $data->fetch(PDO::FETCH_ASSOC);
+                }
+
+                //mặc định trả về null
+                return null;
+            } catch(PDOException $ex){
+                //throw để lớp kế thừa có thể gọi được
+                throw new PDOException($ex->getMessage());
+            }
+        }
+
+        //xóa bản ghi đăng ký đã được xác thực
+        public function deleteRegisterByEmail($email){
+            try{
+                $sqlDelete = "DELETE FROM register WHERE username = ?";
+                //dùng biến static của class <class name>::<tên biến>
+                $data = db::$connectionstring->prepare($sqlDelete);
+
+                $data->execute($email);
+            } catch(PDOException $ex){
+                //throw để lớp kế thừa có thể gọi được
+                throw new PDOException($ex->getMessage());
+            }
+        }
+
+        //xác thực tài khoản, ... : truyền vào mảng đối số mà chưa biết số lượng
+        public function confirm(...$mang){
+            $this->request = $mang[0];
+            $token = $this->request['token'];
+            $email = $this->request['email'];
+
+            //kiểm tra email và token có hợp lệ, insert thông tin lại vào bảng users và xóa bản ghi đó trên bảng register
+            if(isset($token) && isset($email)){
+
+                $check = $this->findRegisterByEmailAndToken($email, $token);
+
+                if($check){
+                    try{
+                        $strInsert = "INSERT INTO users(username, password, realname, created, last_login) VALUES(?, ?, ?, now(), now())";
+                        //dùng biến static của class <class name>::<tên biến>
+                        $data = db::$connectionstring->prepare($strInsert);
+
+                        if($data->execute(array($email, $check['password'], $check['realname']))){
+                            $this->deleteRegisterByEmail($email);
+                            return 1;
+                        }
+                    } catch(PDOException $ex){
+                        //throw để lớp kế thừa có thể gọi được
+                        throw new PDOException($ex->getMessage());
+                    }
+                    
+                }
+            }
+
+            //mặc định đăng ký thất bại
+            return "Đăng ký thất bại!";
+        }
+
+        //đổi mật khẩu, ... : truyền vào mảng đối số mà chưa biết số lượng
+        public function changePassword($username, ...$mang){
+            $this->request = $mang[0];
+
+            
         }
     }
 ?>
