@@ -21,16 +21,13 @@
         <div class="container-fluid">
             <header >
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="index.php">LTT-659</a>
+                    <a class="navbar-brand" href="<?php if($page != 'index') { echo "../../";} else { echo "";} ?>index.php">Trang chủ</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
-                        <li class="nav-item <?php echo $page == 'index' ? 'active' : ''; ?>">
-                            <a class="nav-link" href="<?php if($page != 'index') { echo "../../";} else { echo "";} ?>index.php">Trang chủ</a>
-                        </li>
                     <?php if ($currentUser): ?>
                         <li class="nav-item <?php echo $page == 'wall' ? 'active' : ''; ?>">
                             <a class="nav-link" href="<?php if($page != 'index') { echo "";} else { echo "all_page/client/";} ?>wall.php">Đăng bài viết</a>

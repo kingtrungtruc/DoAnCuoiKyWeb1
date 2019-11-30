@@ -1,5 +1,5 @@
             <footer>
-                <p>Thiết kế bởi <strong>Lê Trung Trực</strong> - Bài tập về nhà Web 1</p>
+                <p><strong></strong>Đồ án cuối kỳ nhà Web 1</p>
             </footer>
         </div>
         <!-- Optional JavaScript -->
