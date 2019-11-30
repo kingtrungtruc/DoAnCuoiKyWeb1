@@ -11,7 +11,9 @@
     //đặt giá trị timezone mặc định cho hệ thống, tất cả các hàm về xử lí thời gian sẽ sử dụng timezone này
     date_default_timezone_set('Asia/Ho_Chi_Minh');
 
-    //class control User
+    /*===============================
+        Class control user
+    ===============================*/
     class userController{
         private $request;
 
@@ -288,6 +290,173 @@
         public function changePassword($username, ...$mang){
             $this->request = $mang[0];
 
+            //kiểm tra dữ liệu
+            if(empty($this->request['old-password']) || empty($this->request['new-password']) || empty($this->request['renew-password'])){
+                return "Vui lòng không bỏ trống ô nào!";
+            }
+
+            if(!strcmp($this->request['new-password'], $this->request['renew-password'])){
+                return "Nhập lại mật khẩu mới không khớp!";
+            }
+
+            if(strcmp($this->request['old-password'], $this->request['new-password'])){
+                return "Mật khẩu mới trùng với mật khẩu hiện tại!";
+            }
+
+            try{
+                $userSelect = $this->getUser($username);
+
+                if($userSelect['username'] != $username){
+                    return "Không tồn tại tên đăng nhập!";
+                }
+
+                if(!password_verify($this->request['old-password'], $userSelect['password'])){
+                    return "Mật khẩu hiện tại không đúng!";
+                }
+
+                //hash mật khẩu
+                $passwordHash = password_hash($this->request['new-password'], PASSWORD_DEFAULT);
+
+                //cập nhật vào database
+                $sqlUpdate = "UPDATE users SET password = ? WHERE username = ?";
+                $data = db::$connectionstring->prepare($sqlUpdate);
+                if($data->execute(array($passwordHash, $username))){
+                    return "Đổi mật khẩu thành công";
+                }
+
+                return "Có lỗi xảy ra!";
+            } catch(PDOException $ex){
+                throw new PDOException($ex->getMessage());
+            }
+        }
+
+        //Cập nhật thông tin cá nhân
+        public function updateProfile($username, $avatar, ...$mang){
+            $this->request = $mang[0];
+
+            $phone = $name = $img = '';
+
+            //cập nhật số điện thoại: 0123456789 hoặc +84123456789
+            if(!empty($this->request['phone'])){
+
+                if(!preg_match('/0{1}[0-9]{9}$|\+[0-9]{2}[0-9]{9}$/', $this->request['phone'])){
+                    return "Định dạng số điện thoại không đúng!";
+                }
+
+                $phone = $this->request['phone'];
+            }
+
+            //cập nhật tên thật
+            if(!empty($this->request['realname'])){
+                //chuyển đổi ký tự thành thực thể html
+                $temp_name = htmlspecialchars($this->request['realname']);
+
+                if(strlen($temp_name) > 50 || strlen($temp_name) < 2){
+                    return "Tên phải có từ 2 đến 50 ký tự!";
+                }
+
+                $name = $temp_name;
+            }
+
+            //cập nhật avatar
+            if(!empty($avatar['avatar']['name']) && $avatar['avatar']['size'] > 0){
+
+                if(getimagesize($avatar['avatar']['tmp_name']) === false){
+                    return "Định dạng hình ảnh chưa đúng!";
+                }
+
+                $img = base64_encode(file_get_contents($avatar['avatar']['tmp_name']));
+            }
+
+            try{
+                $usr = $this->getUser($username);
+                if($usr['username'] != $username){
+                    return "Tên đăng nhập không tồn tại!";
+                }
+
+                if(empty($phone)){
+                    $phone = $usr['phone'];
+                }
+                if(empty($name)){
+                    $name = $usr['realname'];
+                }
+                if(empty($img)){
+                    $img = $usr['avatar'];
+                }
+
+                //cập nhật vào database
+                $sqlUpdate = "UPDATE users realname = ?, phone = ?, avatar = ? WHERE username = ?";
+                $data = db::$connectionstring->prepare($sqlUpdate);
+                if($data->execute(array($name, $phone, $img, $username))){
+                    return "Cập nhật thành công";
+                }
+                return "Cập nhật thất bại, đã có lỗi xảy ra!";
+            }
+            catch(PDOException $ex){
+                throw new PDOException($ex->getMessage());
+            }
+        }
+
+        //tạo bài đăng mới
+        public function newStatus($username, $attach, ...$mang){
+            $this->request = $mang[0];
+
+            //ảnh đính kèm
+            if(!empty($attach['image']['name']) && $attach['image']['size'] > 0){
+
+                if(getimagesize($attach['image']['tmp_name']) === false){
+                    return "Định dạng ảnh không đúng!";
+                }
+
+                $this->request['image'] = $attach['image'];
+            }
+
+            //nội dung bài đăng
+            if(!isset($this->request['image']) && empty($this->request['content'])){
+                return "Nội dung đang trống!";
+            }
+
+            try{
+                $usr = $this->getUser($username);
+                if($usr['username'] != $username){
+                    return "Tên đăng nhập không tồn tại!";
+                }
+
+                $status = new statusController();
+                $id = $status->newStatus($usr['id'], $this->request);
+
+                return $id ? $id : "Đăng bài viết thất bại, đã có lỗi xảy ra!";
+            }
+            catch(PDOException $ex){
+                throw new PDOException($ex->getMessage());
+            }
+        }
+
+        //kiểm tra username và gọi controller comment
+        public function newComment($id_status, $username, $content){
+            //kiểm tra dữ liệu
+            if(empty($content)){
+                return "Nội dung vẫn đang trống!";
+            }
+
+            try{
+                $usr = $this->getUser($username);
+                if($usr['username'] != $username){
+                    return "Tên đăng nhập không tồn tại!";
+                }
+
+                $comment = new commentController();
+                $id = $comment->newComment($id_status, $usr['id'], $content);
+
+                return $id ? $id : "Đăng comment thất bại, đã có lỗi xảy ra!";
+            }
+            catch (PDOException $ex) {
+                throw new PDOexception($ex->getMessage());
+            }
+        }
+
+        //tải các trạng thái mới
+        public function loadNewsFeed($username){
             
         }
     }
