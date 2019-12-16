@@ -1,9 +1,9 @@
-﻿-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th12 10, 2019 lúc 05:00 AM
+-- Thời gian đã tạo: Th12 11, 2019 lúc 06:52 AM
 -- Phiên bản máy phục vụ: 5.7.26
 -- Phiên bản PHP: 7.2.18
 
@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `comment_user_id` int(11) DEFAULT NULL,
   `comment_content` text CHARACTER SET utf8,
   `comment_created` datetime DEFAULT NULL,
-  PRIMARY KEY (`comment_id`)
+  PRIMARY KEY (`comment_id`),
+  KEY `fk_comments_users` (`comment_user_id`),
+  KEY `fk_comments_status` (`comment_status_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -84,8 +86,9 @@ CREATE TABLE IF NOT EXISTS `status` (
   `status_role` text,
   `status_image` varchar(100) DEFAULT NULL,
   `status_wholiked` text,
-  PRIMARY KEY (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`status_id`),
+  KEY `fk_status_users` (`status_user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -109,6 +112,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `fk_comments_status` FOREIGN KEY (`comment_status_id`) REFERENCES `status` (`status_id`),
+  ADD CONSTRAINT `fk_comments_users` FOREIGN KEY (`comment_user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Các ràng buộc cho bảng `status`
+--
+ALTER TABLE `status`
+  ADD CONSTRAINT `fk_status_users` FOREIGN KEY (`status_user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

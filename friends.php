@@ -1,56 +1,54 @@
-<!--Guest-->
+<!-- GUEST -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    // Format Helper
-    $formatHelper = new formatHelper();
-    //$_SERVER['REQUEST_METHOD' => Xác định request gửi đến server con đường nào (post,get,patch,delete)
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        $user = new userController();
-        $message = '';//Thông báo KQ từ server trả về
+// Format Helper
+$formatHelper = new FormatHelper();
+//$_SERVER['REQUEST_METHOD' => Xác định request gửi đến server con đường nào (post,get,patch,delete)
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $user = new UserController();
+    $message = "";//Thông báo KQ từ server trả về
 
-        if (isset($_POST['addFriend'])) {
+    if (isset($_POST['addFriend'])) {
 
-            $message = $user->addFriend($_COOKIE['user_login'], $_POST['user_email']);
-        } else if (isset($_POST['declineFriend'])) {
+        $message = $user->AddFriend($_COOKIE['login'], $_POST['name']);
+    } else if (isset($_POST['declineFriend'])) {
 
-            $message = $user->declineFriend($_COOKIE['user_login'], $_POST['user_email']);
-        } else if (isset($_POST['acceptFriend'])) {
+        $message = $user->DeclineFriend($_COOKIE['login'], $_POST['name']);
+    } else if (isset($_POST['acceptFriend'])) {
 
-            $message = $user->acceptFriend($_COOKIE['user_login'], $_POST['user_email']);
-        } else if (isset($_POST['unFriend'])) {
+        $message = $user->AcceptFriend($_COOKIE['login'], $_POST['name']);
+    } else if (isset($_POST['unFriend'])) {
 
-            $message = $user->deleteFriend($_COOKIE['user_login'], $_POST['user_email']);
-        } else {
+        $message = $user->DeleteFriend($_COOKIE['login'], $_POST['name']);
+    } else {
 
-            $message = $user->unFollowing($_COOKIE['user_login'], $_POST['user_email']);
-        }
-
-        $display = "style='display: block; text-align: center;'";
+        $message = $user->unFollowing($_COOKIE['login'], $_POST['name']);
     }
-    // DIRECTION
-    if (!isset($_COOKIE['user_login'])) {
-        header('Location: index.php');
-    }
+
+    $display = "style='display: block; text-align: center;'";
+}
+// DIRECTION
+if (!isset($_COOKIE['login'])) {
+    header('Location: index.php');
+}
 ?>
 
-<?= $formatHelper->addHeader($_COOKIE['user_login']); ?>
-<?= $formatHelper->addFixMenu(); ?>
+<?= $formatHelper->addHeader($_COOKIE['login']) ?>
+<?= $formatHelper->addFixMenu() ?>
 
 <div class="main">
     <div class="content">
-        <div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center'"?>>
-            <center><?= @$message?: "" ?></center>
-        </div>
+        <div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
 
-        <!--danh sách bạn bè và yêu cầu-->
+        <!-- FRIENDS LIST & REQUEST -->
         <div class="tabs">
             <div class="tab">
                 <input type="radio" id="followed" class="tab-item" name="friend" checked>
                 <label for="followed" class="tab-title">Bạn bè</label>
                 <div class="tab-content">
                     <ul class="global">
-                        <?= $formatHelper->listFriends($_COOKIE['user_login']) ?>
+                        <?= $formatHelper->ListFriends($_COOKIE['login']) ?>
                     </ul>
                 </div>
             </div>
@@ -59,7 +57,7 @@
                 <label for="follows" class="tab-title">Đang chờ</label>
                 <div class="tab-content">
                     <ul class="global">
-                        <?= $formatHelper->listFollows($_COOKIE['user_login']) ?>
+                        <?= $formatHelper->ListFollows($_COOKIE['login']) ?>
                     </ul>
                 </div>
             </div>
@@ -68,7 +66,7 @@
                 <label for="following" class="tab-title">Theo dõi</label>
                 <div class="tab-content">
                     <ul class="global">
-                        <?= $formatHelper->listFollowing($_COOKIE['user_login']) ?>
+                        <?= $formatHelper->ListFollowing($_COOKIE['login']) ?>
                     </ul>
                 </div>
             </div>
@@ -77,12 +75,12 @@
                 <label for="global" class="tab-title">Bạn có biết</label>
                 <div class="tab-content">
                     <ul class="global">
-                        <?= $formatHelper->listUsers($_COOKIE['user_login']) ?>
+                        <?= $formatHelper->ListUsers($_COOKIE['login']) ?>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-    <?= $formatHelper->listFriendIndex($_COOKIE['user_login']) ?>
+    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 </div>
 <?= $formatHelper->closeFooter() ?>

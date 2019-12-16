@@ -25,7 +25,7 @@ $(document).ready(() => {
 		$(e)[0].innerHTML = BeautifullyTimeStatus(
 			new Date(time_now.getFullYear(), time_now.getMonth(), time_now.getDate(), time_now.getHours(), time_now.getMinutes(), time_now.getSeconds()),
 			new Date(post_year, post_month-1, post_day, post_hours, post_minutes, post_seconds));
-	})
+	});
 
 
 	// Reaction action	
@@ -92,7 +92,7 @@ $(document).ready(() => {
 
 		// Ajax send to API and get result
 		$.ajax({
-			url: 'inc/Handler/CommentHandler.php',
+			url: 'inc/handler/commentHandler.php',
 			type: 'POST',
 			data: $("#frmComment-"+id).serialize(),
 			success: (data) => {
@@ -104,17 +104,17 @@ $(document).ready(() => {
 					let element = `
 					    <div class="detail-comment">
 					        <span id="icon">
-					            <img src='${result.avatar}' alt='icon'>
+					            <img src='${result.user_avatar}' alt='icon'>
 					        </span>
 					        <span id="content">
 					            <span id="user-comment">
-					                <a href="profile.php?id=${result.id_user}"> ${result.name} </a>
+					                <a href="profile.php?id=${result.user_id}"> ${result.name} </a>
 					            </span>
 					            <span id="content-commment">
 					                ${result.content}
 					            </span> 
 					        </span>
-					    </div>
+						</div>
 					    `;	
 
 					$('#show-comment-'+id).append(element);
@@ -153,44 +153,44 @@ function BeautifullyTimeStatus(current, previous) {
 
     if (elapsed < msPerMinute) {
     	if (Math.round(elapsed/1000) > 0) {
-	         return Math.round(elapsed/1000) + ' seconds ago';   
+	         return Math.round(elapsed/1000) + ' giây trước';   
     	} else {
-    		return 'just now';
+    		return ' ngây bây giờ';
     	}
     }
 
     else if (elapsed < msPerHour) {
-         return Math.round(elapsed/msPerMinute) + ' minutes ago';   
+         return Math.round(elapsed/msPerMinute) + ' phút trước';   
     }
 
     else if (elapsed < msPerDay ) {
-         return Math.round(elapsed/msPerHour ) + ' hours ago';   
+         return Math.round(elapsed/msPerHour ) + ' giờ trước';   
     }
 
     else if (elapsed < msPerMonth) {
-        return Math.round(elapsed/msPerDay) + ' days ago';   
+        return Math.round(elapsed/msPerDay) + ' ngày trước';   
     }
 
     else if (elapsed < msPerYear) {
-        return Math.round(elapsed/msPerMonth) + ' months ago';   
+        return Math.round(elapsed/msPerMonth) + ' tháng trước';   
     }
 
     else {
-        return Math.round(elapsed/msPerYear ) + ' years ago';   
+        return Math.round(elapsed/msPerYear ) + ' năm trước';   
     }
 }
 
 
 function LikeStatus(id) {
 
-	let username = $('meta[name=username]').attr('value');
+	let user_email = $('meta[name=user_email]').attr('value');
 
 	$.ajax({
-		url: 'inc/Handler/LikeHandler.php',
+		url: 'inc/handler/likeHandler.php',
 		type: 'POST',
 		data: {
 			id_status: id,
-			username: username,
+			user_email: user_email,
 			type: 'like'
 		},
 		dataType: 'json',
@@ -225,14 +225,14 @@ function LikeStatus(id) {
 
 function UnLikeStatus(id) {
 
-	let username = $('meta[name=username]').attr('value');
+	let user_email = $('meta[name=user_email]').attr('value');
 
 	$.ajax({
-		url: 'inc/Handler/LikeHandler.php',
+		url: 'inc/handler/likeHandler.php',
 		type: 'POST',
 		data: {
 			id_status: id,
-			username: username,
+			user_email: user_email,
 			type: 'unlike'
 		},	
 		dataType: 'json',

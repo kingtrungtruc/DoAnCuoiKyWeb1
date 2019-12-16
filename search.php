@@ -1,47 +1,42 @@
-<!--Guest--> 
+<!-- GUEST -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    //Tạo các đối tượng format Helper, user Controller và comment Controller
-    $formatHelper = new formatHelper();
-    $user = new userController();
-    $comment = new commentController();
+// Format Helper
+$formatHelper = new FormatHelper();
+$user = new UserController();
+$comment = new CommentController();
 
-    //tạo các biến để tìm theo post hoặc user
-    $currentTab = "All";
-    $postEntities = null;
-    $posts = null;
-    $users = null;
+$currentTab = "All";
+$postEntities = null;
+$posts = null;
+$users = null;
 
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        $message = "";
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $message = "";
 
-        if(isset($_POST['keyword']) || isset($_POST['search'])){
-            //gán giá trị cho users nếu keyword tìm được trong user
-            $users = $formatHelper->searchUser((!isset($_POST['keyword']) ? mull : $_POST['keyword']));
-            //gán giá trị cho postEntities nếu keyword tìm được trong post
-            $postEntities = $user->searchPosts($_COOKIE['user_login'], (!isset($_POST['keyword']) ? null : $_POST['keyword']));
-            //thêm newsFeed
-            $posts = $formatHelper->addNewsFeed($postEntities, $_COOKIE['user_login']);
-        }
-
-        if(count($posts) == 0 && count($users) == 0){
-            $message = "Không tìm thấy dữ liệu nào khớp với nội dung cần tìm!";
-            $display = "style='display: block; text-align: center'";
-        }
+    if (isset($_POST['keyword']) || isset($_POST['search'])) {
+        $users = $formatHelper->SearchUser((!isset($_POST['keyword']) ? null : $_POST['keyword']));
+        $postEntities = $user->SearchPosts($_COOKIE['login'], (!isset($_POST['keyword']) ? null : $_POST['keyword']));
+        $posts = $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']);
     }
 
-    //điều hướng
-    if(!isset($_COOKIE['user_login'])){
-        header('Location: index.php');
+    if (count($posts) == 0 && count($users) == 0) {
+        $message = "Not found!!";
+        $display = "style='display: block; text-align: center;'";
     }
+}
+
+
+// DIRECTION
+if (!isset($_COOKIE['login'])) {
+    header('Location: index.php');
+}
 ?>
 
-<?= $formatHelper->addHeader($_COOKIE['user_login']); ?>
+<?= $formatHelper->addHeader($_COOKIE['login']) ?>
+<?= $formatHelper->addFixMenu() ?>
 
-<?= $formatHelper->addFixMenu(); ?>
-
-<!--Tìm kiếm-->
 <div class="main">
     <div class="content">
         <div class="alert alert-info" <?= @$display ? : "style='display:none; text-align: center;'" ?>><center>
@@ -70,6 +65,6 @@
 </div>
 
 </div>
-<?= $formatHelper->listFriendIndex($_COOKIE['user_login']) ?>
+<?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 </div>
 <?= $formatHelper->closeFooter() ?>

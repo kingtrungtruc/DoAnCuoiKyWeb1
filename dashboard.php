@@ -1,37 +1,35 @@
-<!--Guest-->
+<!-- GUEST -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    $formatHelper = new formatHelper();
-    $user = new userController();
-    $comment = new commentController();
+// Format Helper
+$formatHelper = new FormatHelper();
+$user = new UserController();
+$comment = new CommentController();
+// DIRECTION
+if (!isset($_COOKIE['login'])) {
+    header('Location: index.php');
+}
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    //điều hướng
-    if(!isset($_COOKIE['user_login'])){
-        header('Location: index.php');
+    if (isset($_POST['addStatus'])) {
+        $user->NewStatus($_COOKIE['login'], $_FILES, $_POST);
+        header('Location: '.$_SERVER['PHP_SELF']);
     }
+}
 
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        if(isset($_POST['addStatus'])){
-            $user->newStatus($_COOKIE['user_login'], $_FILES, $_POST);
-            //$_SERVER['PHP_SELF'] trả về tên file của file đang đượ chạy
-            header('Location: ' . $_SERVER['PHP_SELF']);
-        }
-    }
+// $newsfeed = $user->LoadNewsfeed($_COOKIE['login']);
+$postEntities = $user->SearchPosts($_COOKIE['login'], "");
+?>
 
-    $postEntities = $user->searchPosts($_COOKIE['user_login'], '');
-?> 
+<?= $formatHelper->addHeader($_COOKIE['login']) ?>
+    <?= $formatHelper->addFixMenu() ?>
 
-<?= $formatHelper->addHeader($_COOKIE['user_login']); ?>
-
-<?= $formatHelper->addFixMenu(); ?>
-
-<div class="main">
-    <div class="content">
-        <?= $formatHelper->addStatus(); ?>
-        <?= $formatHelper->addNewsFeed($postEntities, $_COOKIE['user_login']); ?>
+    <div class="main">
+        <div class="content">
+            <?= $formatHelper->addStatus() ?>
+            <?= $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']); ?>
+        </div>
+        <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
     </div>
-    <?= $formatHelper->listFriendIndex($_COOKIE['user_login']); ?>
-</div>
-
-<?= $formatHelper->closeFooter(); ?>
+<?= $formatHelper->closeFooter() ?>

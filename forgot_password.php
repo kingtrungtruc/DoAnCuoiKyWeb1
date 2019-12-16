@@ -1,51 +1,69 @@
-<!--Guest-->
+<!-- MEMBER -->
 <?php
-    require_once 'inc/autoload.php';
+require_once 'inc/autoload.php';
 
-    // Format Helper
-    $formatHelper = new FormatHelper();
+$display = 'display: none';
+$message = '';
+$style = 'danger';
 
-    if ($_SERVER['REQUEST_METHOD'] == "POST") {
-        $user = new userController();
-        $message = $user->changePassword($_COOKIE['user_login'], $_POST);
-        $display = "style='display: block; text-align: center'";
+// Format HTML
+$formatHelper = new FormatHelper();
+$contentHTML = $formatHelper->addResetPassword();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'])) {
+    /*
+     * Request forgot password
+     * */
+    $display = "display: block; text-align: center;";
+
+    //check exists username
+    $users = new UserController();
+    $user = $users->GetUser($_POST['username']);
+
+    if (!$user) {
+        $message = "Không tồn tại email trên hệ thống";
+    } else {
+        $work = new ForgotPasswordController();
+        $message = $work->SendPasswordToEmail($_POST['username']);
+        $style = 'success';
+        $contentHTML = '';
     }
+} else if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['token'])) {
+    /*
+     * Request from token
+     * */
+    $token = filter_input(INPUT_GET, 'token');
 
-    // DIRECTION
-    if (!isset($_COOKIE['user_login'])) {
-        header('Location: index.php');
+    $work = new ForgotPasswordController();
+    $message = $work->ValidateToken($token);
+
+    if ($message === true) {
+        $contentHTML = $formatHelper->addNewPassword();
+        $display = 'display: none';
+    } else {
+        $contentHTML = '';
+        $display = "display: block; text-align: center;";
+        $style = "warning";
     }
+} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['password']) && isset($_GET['token'])) {
+    /*
+     * Request new password
+     * */
+    $work = new ForgotPasswordController();
+    $message = $work->ChangePassword($_GET['token'], $_POST['password']);
+
+    header('Location: login.php');
+    die();
+}
+// DIRECTION
+if (isset($_COOKIE['login'])) {
+    header('Location: dashboard.php');
+}
 ?>
 
-<?= $formatHelper->addHeader($_COOKIE['user_login']); ?>
-<?= $formatHelper->addFixMenu(); ?>
-
-<div class="main">
-    <div class="content">
-        <div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center'"?>>
-            <center><?= @$message?: "" ?></center>
-        </div>
-
-        <!--form đổi mật khẩu-->
-        <form class="frmUpdate" action="" method="POST">
-            <div class="form-group">
-                <label for="old-password">Mật khẩu cũ</label>
-                <input type="text" name="user_password_old" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="new-password">Mật khẩu mới:</label>
-                <input type="text" name="user_password_new" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="renew-password">Nhập lại mật khẩu mới:</label>
-                <input type="text" name="user_password_renew" class="form-control" required>
-            </div>
-            <div class="submit-group">
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
-            </div>
-        </form>
-    </div>
-
-    <?= $formatHelper->listFriendIndex($_COOKIE['user_login']); ?>
-</div>
-<?= $formatHelper->closeFooter(); ?>
+<?=
+    $formatHelper->addHeader('Quên mật khẩu');
+    echo $formatHelper->addAlert($display, $style, $message);
+    echo $contentHTML;
+    $formatHelper->closeFooter();
+?>

@@ -409,6 +409,7 @@ body {
 
 #icon {
 	display: table-cell;
+	width: 80px;
 }
 #icon img {
 	width: 30px;

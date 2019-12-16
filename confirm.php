@@ -1,19 +1,24 @@
-<!--Member-->
+<!-- MEMBER -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    $formatHelper = new formatHelper();
+// Format Helper
+$formatHelper = new FormatHelper();
 
-    //form request
-    if($_SERVER['REQUEST_METHOD'] == "GET"){
-        $user = new userController();
-        $message = $user->confirm($_GET);
-
-        if($message == 1){
-            header('Location: login.php');
-        }
-        else{
-            header('Location: register.php');
-        }
+// Form Request
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $user = new UserController();
+    $message = $user->confirm($_GET);
+    
+    if ($message == 1)
+    { 
+       header('Location: login.php');
     }
+    else
+    {
+       header('Location: register.php');
+    }
+}
+
 ?>
+

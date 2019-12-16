@@ -1,52 +1,50 @@
-<!--Member--> 
+<!-- MEMBER -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    $formatHelper = new formatHelper();
-    $style = 'danger';
+// Format Helper
+$formatHelper = new FormatHelper();
+$style = 'danger';
 
-    //form request
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        $user = new userController();
-        $message = $user->register($_POST);
+// Form Request
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $user = new UserController();
+    $message = $user->register($_POST);
 
-        if($message == 1){
-            $message = 'Đăng ký thành công, vui lòng kiểm tra email và làm theo hướng dẫn';
-            $style = 'success';
-        }
-
-        $display = "class='alert alert-$style' style='display: block; text-align: center'";
+    if ($message == 1) {
+        $message = 'Gửi email xác nhận thành công, vui lòng kiểm tra email và làm theo hướng dẫn';
+        $style = 'success';
     }
 
-    //điều hướng
-    if(isset($_COOKIE['user_login'])){
-        header('Location: dashboard.php');
-    }
+    $display = "class='alert alert-$style' style='display: block; text-align: center;'";
+}
+
+// DIRECTION
+if (isset($_COOKIE['login'])) {
+    header('Location: dashboard.php');
+}
 ?>
 
 <?= $formatHelper->addHeader('Đăng ký'); ?>
+<div <?= @$display ?: "class='alert alert-$style' style='display:none;text-align: center;'"?>> <?= @$message?: "" ?> </div>
 
-<div <?= @$display ?: "class='alert alert-$style' style='display: block; text-align: center'"?>>
-<?= @$message ?: "" ?>
-</div>
-
-<!--Đăng ký-->
+<!-- REGISTER -->
 <form class="frmReg" action="" method="POST">
     <div class="form-group">
         <label for="usename">Email:</label>
-        <input type="email" name="user_email" class="form-control" maxlength="255" required>
+        <input type="email" name="username" class="form-control" maxlength="255" required>
     </div>
     <div class="form-group">
         <label for="realname">Username:</label>
-        <input type="text" name="user_displayname" class="form-control" maxlength="255" required>
+        <input type="text" name="realname" class="form-control" maxlength="255" required>
     </div>
     <div class="form-group">
         <label for="password">Mật khẩu:</label>
-        <input type="password" name="user_password" class="form-control" required>
+        <input type="password" name="password" class="form-control" required>
     </div>
     <div class="form-group">
         <label for="password">Nhập lại mật khẩu:</label>
-        <input type="password" name="user_repassword" class="form-control" required>
+        <input type="password" name="re-password" class="form-control" required>
     </div>
     <div class="submit-group">
         <button type="submit" class="btn btn-warning">Đăng ký</button>

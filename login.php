@@ -1,42 +1,40 @@
-<!--Member-->
+<!-- MEMBER -->
 <?php
-    require_once 'inc/autoloadClass.php';
+require_once 'inc/autoload.php';
 
-    $formatHelper = new formatHelper();
+// Format HTML
+$formatHelper = new FormatHelper();
 
-    //form request
-    if($_SERVER['REQUEST_METHOD'] == "POST"){
-        $user = new userController();
-        $message = $user->login($_POST);
-        $display = "style='display: block; text-align: center'";
+// Form REQUEST
+if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
+    $user = new UserController();
+    $message = $user->login($_POST);
+    $display = "style='display: block; text-align: center;'";
 
-        if($message == 1){
-            header('Location: dashboard.php');
-        }
-    }
+    if ($message == 1) header('Location: dashboard.php');
+}
 
-    //điều hướng
-    if(isset($_COOKIE['user_login'])){
-        header('Location: dashboard.php');
-    }
-?> 
+// DIRECTION
+if (isset($_COOKIE['login'])) {
+    header('Location: dashboard.php');
+}
+?>
 
-<?= $formatHelper->addHeader('Đăng nhập'); ?>
-
+<?= $formatHelper->addHeader('Đăng nhập') ?>
 <div class="alert alert-danger" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
 
 <!-- LOGIN -->
 <form class="frmLogin" action="" method="POST">
     <div class="form-group">
         <label for="usename">Email:</label>
-        <input type="email" name="user_email" class="form-control" maxlength="255" required>
+        <input type="email" name="username" class="form-control" maxlength="255" required>
     </div>
 	<div class="form-group">
 		<label for="password">Mật khẩu:</label>
-		<input type="password" name="user_password" class="form-control" required>
+		<input type="password" name="password" class="form-control" required>
 	</div>
 	<div class="form-group">
-		<input type="checkbox" name="user_remember" class="form-check-input" id="user_remember">
+		<input type="checkbox" name="remember" class="form-check-input" id="remember">
 		<label for="remember">Nhớ mật khẩu</label>
 	</div>
        <div class="submit-group">
