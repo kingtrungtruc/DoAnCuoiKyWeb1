@@ -82,7 +82,7 @@ if (isset($_COOKIE['login'])) {
                     <div class="row m-t-15 m-b--20 text-center">
                         <div class="col-xs-12">
                             Đã có tài khoản! 
-                            <a href="login.html">Đăng nhập</a>
+                            <a href="login.php">Đăng nhập</a>
                         </div>
                     </div>
                 </form>

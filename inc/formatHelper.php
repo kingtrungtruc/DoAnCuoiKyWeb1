@@ -370,13 +370,13 @@ STATUS;
                     <div class="card-footer">
                         <div class="reaction">
                             <ul>
-                                <li style="display: $like" class='reaction-like' id="reaction-like-$content[status_id]"> &nbsp;Liked <span id="numlike-$content[status_id]">$amountLike</span></li>
+                                <li style="display: $like" class='reaction-like' id="reaction-like-$content[status_id]"> &nbsp;Đã thích <span id="numlike-$content[status_id]">$amountLike</span></li>
 
-                                <li style="display: table-cell" class='reaction-nonlike' id="reaction-nonlike-$content[status_id]"> &nbsp;Like <span id="numnonlike-$content[status_id]">$amountLike</span></li>
+                                <li style="display: table-cell" class='reaction-nonlike' id="reaction-nonlike-$content[status_id]"> &nbsp;Thích <span id="numnonlike-$content[status_id]">$amountLike</span></li>
 
-                                <li class="reaction-comment" id="reaction-comment-$content[status_id]">&nbsp;Comment <span id="numcom-$content[status_id]">$amountComment</span></li>
+                                <li class="reaction-comment" id="reaction-comment-$content[status_id]">&nbsp;Bình luận <span id="numcom-$content[status_id]">$amountComment</span></li>
 
-                                <li class="reaction-share" id="reaction-share-$content[status_id]">&nbsp;Share</li>
+                                <li class="reaction-share" id="reaction-share-$content[status_id]">&nbsp;Chia sẽ</li>
                             </ul> 
                             <!--Comment-->
                             <div class="hide-comment-status" id="comment-status-$content[status_id]">
@@ -649,7 +649,11 @@ LISTFRIEND;
                     </div>
                     <div class="row text-center">
                         <div class="col-xs-12">
-                            Đã nhớ mật khẩu?
+                            Chưa có tài khoản?
+                            <a href="register.php" title="Đăng nhập" target="_parent"> Đăng ký</a>
+                        </div>
+                        <div class="col-xs-12">
+                            Đã nhớ mật khẩu!
                             <a href="login.php" title="Đăng nhập" target="_parent"> Đăng nhập</a>
                         </div>
                     </div>
