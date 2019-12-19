@@ -1,6 +1,5 @@
-Project Team F5 - WEB 1 - HCMUS
+Project Đồ án cuối kỳ Web 1 - MXH
 ------------------------------------------
-_Social website project_
 
 Preview Website
 ------------------------------------------
