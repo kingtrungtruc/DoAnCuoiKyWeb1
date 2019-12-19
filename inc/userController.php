@@ -112,7 +112,7 @@ class UserController
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Xác nhận đăng ký tài khoản';
-            $mail->Body    = "Nhấn vào đường dẫn sau để xác nhận đăng ký tài khoản: <a href='http://$_SERVER[HTTP_HOST]/confirm.php?email=$email&token=$token'>http://$_SERVER[HTTP_HOST]/confirm.php?email=$email&token=$token</a>";
+            $mail->Body    = "Nhấn vào đường dẫn sau để xác nhận đăng ký tài khoản: <a href='http://$_SERVER[HTTP_HOST]/Web1/LT/DoAnCuoiKyWeb1/confirm.php?email=$email&token=$token'>http://$_SERVER[HTTP_HOST]/Web1/LT/DoAnCuoiKyWeb1/confirm.php?email=$email&token=$token</a>";
 
             $mail->send();
             return 1;

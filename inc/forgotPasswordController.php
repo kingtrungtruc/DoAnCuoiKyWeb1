@@ -86,7 +86,7 @@ class ForgotPasswordController
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Lấy lại mật khẩu';
-            $mail->Body    = "Nhấn vào đường dẫn sau để lấy lại mật khẩu: <a href='http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token>http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token</a>.<br/>Có hiệu lực trong 1 ngày, kể từ thời điểm nhận được email này.<br/><br/>Nếu không phải là bạn, vui lòng không thực hiện điều này và hãy đổi mật khẩu cho tài khoản của mình!";
+            $mail->Body    = "Nhấn vào đường dẫn sau để lấy lại mật khẩu: <a href='http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token'>http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token</a>.\nCó hiệu lực trong 1 ngày, kể từ thời điểm nhận được email này.<br/><br/>Nếu không phải là bạn, vui lòng không thực hiện điều này và hãy đổi mật khẩu cho tài khoản của mình!";
 
             $mail->send();
             return 'Gửi thành công, vui lòng kiểm tra email và làm theo hướng dẫn';
@@ -132,6 +132,10 @@ class ForgotPasswordController
         if (!isset($user)) {
             return "Token không hợp lệ";
         }
+
+        $sqlDelete = "DELETE FROM forgot_password WHERE forgot_password_email = ?";
+        $data2 = db::$connection->prepare($sqlDelete);
+        $data2->execute([$user]);
         // Hash password
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -141,6 +145,7 @@ class ForgotPasswordController
             return "Đổi mật khẩu thành công, mật khẩu mới của bạn là: $password";
         }
 
+        
         return "Có lỗi xảy ra, vui lòng thử lại";
     }
 }

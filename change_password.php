@@ -19,31 +19,29 @@ if (!isset($_COOKIE['login'])) {
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
+<?= $formatHelper->addLeftMenu($_COOKIE['login'],'tomato') ?>
 
-<div class="main">
-    <div class="content">
-        <div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
+<div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
 
-        <!-- CHANGE PASSWORD -->
-        <form class="frmUpdate" action="" method="POST">
-            <div class="form-group">
-                <label for="old-password">Mật khẩu cũ</label>
-                <input type="password" name="old-password" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="new-password">Mật khẩu mới:</label>
-                <input type="password" name="new-password" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="renew-password">Nhập lại mật khẩu mới:</label>
-                <input type="password" name="renew-password" class="form-control" required>
-            </div>
-            <div class="submit-group">
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
-            </div>
-        </form>
+<!-- CHANGE PASSWORD -->
+<form class="frmUpdate" action="" method="POST">
+    <div class="form-group">
+        <label for="old-password">Mật khẩu cũ</label>
+        <input type="password" name="old-password" class="form-control" required>
     </div>
-
-    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
+    <div class="form-group">
+        <label for="new-password">Mật khẩu mới:</label>
+        <input type="password" name="new-password" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="renew-password">Nhập lại mật khẩu mới:</label>
+        <input type="password" name="renew-password" class="form-control" required>
+    </div>
+    <div class="submit-group">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </div>
+</form>
 </div>
+
+<?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>

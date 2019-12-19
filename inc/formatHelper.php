@@ -13,6 +13,7 @@ class FormatHelper
     private $header;
     private $footer;
     private $fixmenu;
+    private $leftMenu;
     private $rightMenu;
     private $status;
     private $newsfeed;
@@ -43,16 +44,46 @@ class FormatHelper
             $login = $_COOKIE['login'];
         }
 
-        $this->header =<<<HEADER
+        $path_string = $_SERVER['PHP_SELF'];
+        $mang_path = explode("/", $path_string);
+        $name_page = $mang_path[count($mang_path)-1];
+        if($name_page == "login.php" || $name_page == "register.php" || $name_page == "forgot_password.php"){
+            $this->header =<<<HEADER
 <!DOCTYPE html>
 <html lang="vn">
 <head>
     <title> $realname </title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta name="username" value="$login">
+
+    <link href="https://app.infinityfree.net/css/clients-material.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+HEADER;
+        }else{
+            $this->header =<<<HEADER
+<!DOCTYPE html>
+<html lang="vn">
+<head>
+    <title> $realname </title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="username" value="$login">
+    
     <link rel="stylesheet" type="text/css" href="asset/style.css">
+    <link rel="stylesheet" type="text/css" href="asset/my_style_fix.css">
     <link rel="stylesheet" type="text/css" href="asset/search/search.css">
     <link rel="stylesheet" type="text/css" href="plugins/bootstrap/css/bootstrap.css">
+    
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -64,6 +95,8 @@ class FormatHelper
 <body>
 <div class="container-fluid">
 HEADER;
+        }
+        
         return $this->header;
     }
 
@@ -74,9 +107,6 @@ HEADER;
     public function closeFooter()
     {
         $this->footer =<<<FOOTER
-</div>
-<div class="copyright">
-    <span>Đồ án Web 1 | MXH</span>       
 </div>
 <script src="asset/js/hamburgerMenu.js" defer></script>
 <script src="asset/js/dashboard.js" defer></script>
@@ -106,46 +136,74 @@ FOOTER;
         
         //Here doc viết html vẫn giữ format
         $this->fixmenu =<<<FIXMENU
-<div class="fix-menu">
-    <div id="icon">
-        <a href="index.php"><img src="asset/img/home.png" alt="home"></a>
-    </div>
+<div class="container-fluid">            
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="navbar-header col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
+                
+                <div class="navbar-header col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <a class="navbar-brand" href="dashboard.php" id="trangchu-hover">Trang chủ</a>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style="text-align: center;">
+                    <form class="navbar-form" action="search.php">
+                        <div class="form-group">
+                            <input type="search" class="form-control" placeholder="Nhập tên hoặc email..." name="keyword">
+                        </div>
+                        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search"></span> Tìm</button>
+                    </form>
+                </div>
 
-    <ul id="nav" class="nav-info">
-        <li><a href="profile.php?id=$id">( $name )</a></li>
-        <li><a href="friends.php">Bạn bè $req </a></li>
-        <li><a href="logout.php">Đăng xuất</a></li>
-    </ul>
-
-    <ul id="nav">
-        <div class="d-flex justify-content-center h-100">
-        <form class="form" action="search.php" method="POST">
-            <div class="searchbar ">
-            <input class="search_input " type="search" name="keyword" placeholder="Tìm status, bạn bè...">
-            <a href="search.php" class="search_icon "><i class="fas fa-search "></i></a>
+                <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dangxuat-hover"><a href="logout.php"><span class="glyphicon glyphicon-log-in"></span> Đăng xuất</a></li>
+                    </ul>
+                </div>  
+                
+                <div class="navbar-header col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1"></div>
             </div>
-        </form>
         </div>
-    </ul>
-    <span id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </span>
-    <div class="hamburger-menu">
-        <ul>
-            <li><i class="fas fa-caret-right"></i><a href="dashboard.php">Trang chủ</a></li>
-            <li><i class="fas fa-caret-right"></i><a href="profile.php?id=$id"><i>$name<i></a></li>
-            <li><i class="fas fa-caret-right"></i><a href="friends.php">Bạn bè $req </a></li>
-            <li><i class="fas fa-caret-right"></i><a href="logout.php">Đăng xuất</a></li>
-        </ul>
-    </div>  
-
-
-    <div class="clear"></div>
+    </nav>
 </div>
+<div class="container-fluid">
+    <div class="body-website">
+        <div class="row">
 FIXMENU;
         return $this->fixmenu;
+    }
+
+    /**
+     * Giao diện Menu bên trái
+     */
+    public function addLeftMenu($username,$bg_color)
+    {
+        $user = new UserController();
+        $usr = $user->GetUser($username);
+        $id = $usr['user_id'];
+        $name = $usr['user_displayname'];
+
+        $this->leftMenu =<<<LEFTMENU
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="fix-left-menu">
+                        <h4 class="text-center"><a href="profile.php?id=$id">$name</a></h4>                
+                        <ul class="list-group list-group-flush"> 
+                            <a href="change_profile.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-pencil"></span> Đổi thông tin </li></a>   
+                            <a href="change_password.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-wrench"></span> Đổi mật khẩu </li></a>   
+                            <a href="message.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">5</span></li></a>
+                            <a href="following.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">3</span></li></a>
+                            <a href="follows.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-user"></span> Chờ phản hồi <span class="badge">3</span></li></a>
+                            <a href="all_user.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-search"></span> Có thể bạn biết <span class="badge">7</span></li></a>               
+                        </ul> 
+                    </div>  
+                </div>
+            </div>             
+        </div>
+        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" style="background-color: $bg_color">
+            <br/>
+LEFTMENU;
+        return $this->leftMenu;
     }
 
     /**
@@ -173,24 +231,25 @@ RIGHTMENU;
     {
             // <label for="image">Hình ảnh: </label>
         $this->status =<<<STATUS
-<div class="status">
-    <form action="" method="POST" enctype="multipart/form-data">
-        <textarea rows='6' placeholder='Viết gì đó ...' class="content" name="content"></textarea>
+            <div class="status">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <textarea rows='6' placeholder='Hôm nay của bạn thế nào...' class="content" name="content"></textarea>
 
-        <div class="status-extra-content">
-            <hr>
-            <input type="file" name="image" class="form-control" id="status-image">
-            <button class="btn btn-default" id="status-image-btn"><i class="far fa-image fa-2x"></i></button>
+                    <div class="status-extra-content">
+                        <hr>
+                        <input type="file" name="image" class="form-control" id="status-image">
+                        
 
-            <select class="form-control" id="sel1" name = "role">
-                <option>Công khai</option>
-                <option>Bạn bè</option>
-                <option>Chỉ mình tôi</option>
-            </select>
-            <button name="addStatus" class="btn btn-primary center-block" value="" id="btnSubmit">Đăng</button>
-        </div>
-    </form>
-</div>
+                        <select class="form-control" id="sel1" name = "role">
+                            <option>Công khai</option>
+                            <option>Bạn bè</option>
+                            <option>Chỉ mình tôi</option>
+                        </select>
+                        <button name="addStatus" class="btn btn-primary center-block" value="" id="btnSubmit">Đăng</button>
+                    </div>
+                </form>
+            </div>
+        
 STATUS;
         return $this->status;
     }
@@ -228,13 +287,13 @@ STATUS;
             $currentAvatar = !empty($currentUser['user_avatar']) ? 'data:image;base64,'.$currentUser['user_avatar'] : "asset/img/non-avatar.png";
 
             // role status
-            $role = "";
+            $role = "fas fa-globe-asia";
             if (strcmp($content['status_role'], 'Công khai') == 0)
-                $role = '<span class="fas fa-globe-asia"></span>';
+                $role = 'fas fa-globe-asia';
             if (strcmp($content['status_role'], 'Bạn bè') == 0)
-                $role = '<span class="fas fa-user"></span>';
+                $role = 'fas fa-user';
             if (strcmp($content['status_role'], 'Chỉ mình tôi') == 0)
-                $role = '<span class="far fa-eye-slash"></span>';
+                $role = 'far fa-eye-slash';
 
             // like or unlike
             $amountLike = $status->AmountOfLiked($content['status_id']);
@@ -258,49 +317,50 @@ STATUS;
 
             // content status html
             $this->newsfeed .=<<<NEWSFEED
-<div class="newsfeed">
-    <a name="$content[status_id]"></a>
-    <div class="new" id="$content[status_id]">
+            <!--Status-->
+            <div class="card">
+                <a name="$content[status_id]"></a>
+                <div id="$content[status_id]">
+                    <div class="card-header">
+                        <div class="new-title">
+                            <img src='$src' alt="logo" title='$name'> 
+                            <h4 id="user">
+                                <a href="profile.php?id=$id_user">$name</a>                
+                            </h4>                                
+                            <span title='$content[status_created]'><i>$content[status_created]<span title="$content[status_role]">&nbsp;&nbsp;<span class=$role></span></span></i></span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="new-content">$content[status_content]</div>
+                        $imageAttach
+                    </div>
+                    <!--Reaction Button-->
+                    <div class="card-footer">
+                        <div class="reaction">
+                            <ul>
+                                <li style="display: $like" class='reaction-like' id="reaction-like-$content[status_id]"> &nbsp;Liked <span id="numlike-$content[status_id]">$amountLike</span></li>
 
-        <!-- Status -->
-        <div class='new-title'>
-            <img src='$src' alt='logo'> 
-            <h4 id='user'><a href="profile.php?id=$id_user">$name</a></h4>
-            <span>&nbsp;&nbsp;$role</span>
-            <span title="$usr[user_created]"><i>$content[status_created]</i></span>
-        </div>
-        <div class='new-content'>$content[status_content]</div>
-        $imageAttach
+                                <li style="display: table-cell" class='reaction-nonlike' id="reaction-nonlike-$content[status_id]"> &nbsp;Like <span id="numnonlike-$content[status_id]">$amountLike</span></li>
 
-        <!-- Reaction Button -->
-        <hr style="width: 97%">
-        <div class="reaction">
-            <ul>
-                <li style="display: $like" class='reaction-like' id=reaction-like-$content[status_id]> &nbsp;Liked <span id=numlike-$content[status_id]>$amountLike</span>
-                </li>
-                <li style="display: $nonlike" class='reaction-nonlike' id=reaction-nonlike-$content[status_id]> &nbsp;Like <span id=numnonlike-$content[status_id]>$amountLike</span>
-                </li>
-                <li class="reaction-comment" id="reaction-comment-$content[status_id]">&nbsp;Comment <span id=numcom-$content[status_id]>$amountComment</span></li>
-                <li class="reaction-share" id="reaction-share-$content[status_id]">&nbsp;Share</li>
-            </ul>
-        </div>
+                                <li class="reaction-comment" id="reaction-comment-$content[status_id]">&nbsp;Comment <span id="numcom-$content[status_id]">$amountComment</span></li>
 
-        <!-- Comment -->
-        <hr>
-        <div class="hide-comment-status" id="comment-status-$content[status_id]">
-            <div class="new-comment">
-                <span id="icon"><img src='$currentAvatar' alt='logo'></span>
-                <span id="comment">
-                    <form action="#" method="POST" class="frmComment" id="frmComment-$content[status_id]">
-                        <input name='username' value='$_COOKIE[login]' hidden>
-                        <input name='type' value='new_status' hidden>
-                        <input name='id_status' value='$content[status_id]' hidden>
-                        <input type="text" name="content_comment" class="content_comment" placeholder="Viết bình luận ..." value="" id="content_comment_$content[status_id]">
-                        <button name="addComment" class="btn btn-primary center-block" style="display: none">Đăng</button>
-                    </form>
-                </span>
-            </div>
-            <div class="show-comment" id="show-comment-$content[status_id]">
+                                <li class="reaction-share" id="reaction-share-$content[status_id]">&nbsp;Share</li>
+                            </ul> 
+                            <!--Comment-->
+                            <div class="hide-comment-status" id="comment-status-$content[status_id]">
+                                <div class="new-comment">
+                                    <img src="$currentAvatar" alt="logo" title="$name">
+                                    <div class="content">
+                                        <form action="#" method="POST" class="frmComment" id="frmComment-$content[status_id]">
+                                            <input name="username" value="$_COOKIE[login]" hidden>
+                                            <input name="type" value="new_status" hidden>
+                                            <input name="id_status" value="$content[status_id]" hidden>
+                                            <input type="text" name="content_comment" class="content_comment" placeholder=" Viết bình luận ..." value="" id="content_comment_$content[status_id]">
+                                            <button name="addComment" class="btn btn-primary center-block" style="display: none">Đăng</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="show-comment" id="show-comment-$content[status_id]">
 NEWSFEED;
 
             //show comment
@@ -315,24 +375,27 @@ NEWSFEED;
 
                 // content html comment
                 $this->newsfeed .=<<<COMMENTS
-    <div class="detail-comment">
-        <span id="icon">
-            <img src='$avatarUserComment' alt='icon'>
-        </span>
-        <span id="content">
-            <span id="user-comment">
-                <a href="profile.php?id=$id_user_comment"> $nameComment </a>
-            </span>
-            <span id="content-commment">
-                $contentComment
-            </span> 
-        </span>
-    </div>
+                                    <div class="detail-comment">
+                                        <div id="icon">
+                                            <img src='$avatarUserComment' alt="icon" title='$nameComment'>
+                                        </div>
+                                        <div class="content">
+                                            <span id="user-comment">
+                                                <a href="profile.php?id=$id_user_comment"> $nameComment </a>
+                                            </span>
+                                            <span id="content-commment">
+                                                $contentComment
+                                            </span> 
+                                        </div>
+                                    </div>
+                                    <br/>
 COMMENTS;
             }
 
-            $this->newsfeed.= "</div></div></div></div>";
+            $this->newsfeed.= "</div></div></div></div></div></div><br/>";
         }
+
+        $this->newsfeed.="</div>";
         return $this->newsfeed;
     }
 
@@ -344,9 +407,13 @@ COMMENTS;
 
 
         $this->friend .=<<<FRIENDSINDEX
-<div class="listfriend">
-    <div class="content">
-        <ul>
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="fix-right-menu">
+                        <h4 class="text-center">Danh sách bạn bè </h4>
+                        <div>
+                            <ul class="list-group list-group-flush">
 FRIENDSINDEX;
 
         foreach ($users as $usr) {
@@ -356,18 +423,23 @@ FRIENDSINDEX;
             $id = $usr['user_id'];
 
             $this->friend .=<<<FRIENDSINDEX
-<li>
-    <span id="ficon"><img src=$src alt="."></span>
-    <span><a href="profile.php?id=$id">$name</a></span>
-    <span id="onoff"></a></span>
-</li>
+                                <li class="list-group-item">
+                                    <a href="profile.php?id=$id">
+                                        <span id="ficon"><img src=$src alt="."></span>
+                                        <span>$name</span>
+                                        <span id="onoff"></<span></span>
+                                    </a>
+                                </li>
 FRIENDSINDEX;
         }
 
         $this->friend .=<<<FRIENDSINDEX
-        </ul>
-    </div>
-</div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 FRIENDSINDEX;
 
 
@@ -518,16 +590,42 @@ LISTFRIEND;
     public function addResetPassword()
     {
         $this->frmResetPassword =<<<FORM_RESET_PASSWORD
-<form class="frmLogin" action="" method="POST">
-    <div class="form-group">
-        <label for="usename">Gửi mật khẩu qua mail:</label>
-        <input type="email" name="username" class="form-control" maxlength="50" required>
+<!--RESET PASSWORD-->
+<div class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a><b>LẤY LẠI MẬT KHẨU</b></a>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form method="post" action="">
+                    <div class="input-group form-float">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="email" class="form-control" name="username" placeholder="Địa chỉ Email..."
+                                    required autofocus>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-block bg-pink waves-effect">Gửi mã</button>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-xs-12">
+                            Đã nhớ mật khẩu?
+                            <a href="login.php" title="Đăng nhập" target="_parent"> Đăng nhập</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="submit-group">
-        <button type="submit" class="btn btn-primary">Gửi</button>
-        <a href="login.php" title="Đăng nhập" target="_parent">Đăng nhập</a>
-    </div>
-</form>
+</div>
 
 FORM_RESET_PASSWORD;
         return $this->frmResetPassword;
@@ -540,15 +638,35 @@ FORM_RESET_PASSWORD;
     {
         $this->frmNewPassword =<<<FORM_NEW_PASSWORD
 <!-- NEW PASSWORD -->
-<form class="frmLogin" action="" method="POST" name="new">
-    <div class="form-group">
-        <label for="pasword">Mật khẩu mới:</label>
-        <input type="password" name="password" class="form-control" maxlength="255" required>
+<div class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a><b>MẬT KHẨU MỚI</b></a>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form method="POST" action="">
+                    <div class="input-group form-float">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu mới..."
+                                required autofocus>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-6">
+                            <button type="submit" class="btn btn-block bg-pink waves-effect">Đổi mật khẩu</button>
+                        </div>
+                        <div class="col-xs-3"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="submit-group">
-        <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
-    </div>
-</form>
+</div>
 
 FORM_NEW_PASSWORD;
         return $this->frmNewPassword;
@@ -583,8 +701,6 @@ FORM_NEW_PASSWORD;
             $src = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png";
 
             $this->users .=<<<SEARCHUSER
-            <div class="user">
-        <div class="user-item" id="38">
         <!-- Status -->
         <div class="new-title">
             <img src="$src" alt="logo"> 
@@ -592,7 +708,6 @@ FORM_NEW_PASSWORD;
             <span>&nbsp;&nbsp;</span>
             <span title="$usr[created]"><i>$usr[created]</i></span>
         </div>
-    </div></div>
 SEARCHUSER;
         }
         

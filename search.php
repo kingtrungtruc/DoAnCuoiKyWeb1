@@ -36,13 +36,10 @@ if (!isset($_COOKIE['login'])) {
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
+<?= $formatHelper->addLeftMenu($_COOKIE['login'],'lightgreen') ?>
 
-<div class="main">
-    <div class="content">
-        <div class="alert alert-info" <?= @$display ? : "style='display:none; text-align: center;'" ?>><center>
-                <?= @$message ? : "" ?>
-            </center>
-        </div>
+<div>
+    <div class="alert alert-info" <?= @$display ? : "style='display:none; text-align: center;'" ?>><center><?= @$message ? : "" ?></center></div>
         <div id="btnFilters">
             <button class="btn active" onclick="filterSelection('all')"> Show all</button>
             <button class="btn" onclick="filterSelection('users')"> Users</button>
@@ -61,10 +58,7 @@ if (!isset($_COOKIE['login'])) {
             echo $posts;
         } ?>
     </div>
-
 </div>
 
-</div>
 <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
-</div>
 <?= $formatHelper->closeFooter() ?>

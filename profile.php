@@ -57,61 +57,17 @@ $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2
 ?>
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
-<div class="main">
-    <div class="content">
-        <div class="user-info">
-            <div class="info-title">
-                <span><img src="<?= $user2_avatar?>"/></span>
-                <span id="name"><?=$user2['user_displayname']?></span>
-            </div>
-            <div class="info-body">
-                <form action="friends.php" method="post">
-                    <input type="hidden" name="name" value="<?=$user2['user_email']?>">
-                    <?php
-                    if($id_user2 != $id_user1) {
-                        if ($noRelationship) {
-                            ?>
-                            <button type="submit" class="btn btn-primary" name="addFriend">Thêm bạn bè</button>
-                            <?php
-                        }
-                        ?>
-                        <?php
-                        if ($follows) {
-                            ?>
-                            <button type="submit" class="btn btn-success" name="acceptFriend">Chấp nhận</button>
-                            <button type="submit" class="btn btn-danger" name="declineFriend">Từ chối</button>
-                            <?php
-                        }
-                        ?>
-                        <?php
-                        if ($followed) {
-                            ?>
-                            <button type="submit" class="btn btn-danger" name="unFriend">Hủy kết bạn</button>
-                            <?php
-                        }
-                        if ($following) {
-                            ?>
-                            <button type="submit" class="btn btn-warning" name="delete-friend">Bỏ theo dõi</button>
-                            <?php
-                        }
-                    } else {
-                        ?>
-                        <select id="options_setting" class="form-control" onchange="location = this.value;">
-                            <option value="settings" selected> Cài đặt </option>
-                            <option disabled>---------------</option>
-                            <option value="change_profile.php">Đổi thông tin</option>
-                            <option value="change_password.php">Đổi mật khẩu</option>
-                            <option disabled>---------------</option>
-                            <option value="logout.php">Đăng xuất</option>
-                        </select>
-                        <?php
-                    }
-                    ?>
-                </form>
-            </div>
-        </div>
-        <?= $formatHelper->addNewsfeed($statusOfUserB,$user1['user_email'])?>
+<?= $formatHelper->addLeftMenu($_COOKIE['login'], 'gold') ?>
+
+<div class="user-info">
+    <div class="info-title">
+        <span><img src="<?= $user2_avatar?>"/></span>
+        <span id="name"><?=$user2['user_displayname']?></span>
     </div>
-    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
-</div>
+</div> 
+<?php if($id_user1 == $id_user2): { ?>
+<?= $formatHelper->addStatus() ?>
+<?php }endif; ?>
+<?= $formatHelper->addNewsfeed($statusOfUserB,$user1['user_email'])?>
+<?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>

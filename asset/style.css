@@ -156,11 +156,12 @@ body {
 	width: inherit;
 }
 
-.content {
+/*.content {
 	width: 83%;
 	display: inline-block;
-    margin-right: 10px;
-}
+	margin-right: 10px;
+	border-radius: 10px;
+}*/
 
 
 .new {
@@ -170,39 +171,6 @@ body {
 	margin: 5px 0px;
 	max-width: 800px;
 	margin: 0 auto;
-}
-
-.new-title {
-	padding: 12px 12px 0px;
-	height: 64px;
-
-}
-.new-title img {
-	float: left;
-	width: 35px;
-	height: 35px;
-	margin-right: 15px;
-	background: #fff;
-	border-radius: 50%;
-}
-
-#user {
-	display: flex;
-	margin: 0;
-	font-weight: 600;
-	font-size: 16px;
-	display: inline;
-}
-
-.new-title i {
-	color: #999;
-	display: block;
-}
-
-.new-content {
-	display: block;
-	font-size: 15px;
-	padding: 0px 12px 0px;
 }
 
 .newsfeed {
@@ -319,12 +287,12 @@ body {
 
 .tab-content {
 	width: 100%;
-	position: absolute;
+	/*position: absolute;*/
 	color: #000;
 	left: 0;
 	transition: all 0.5s;
-	opacity: 0;
-	z-index: 1;
+	/*opacity: 0;
+	z-index: 1;*/
 }
 
 .tab-item:checked + .tab-title {
@@ -342,7 +310,7 @@ body {
 .tab-content .global {
 	list-style-type: none;
 	text-align: center;
-	padding: 0;
+	/*padding: 0;*/
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-auto-rows: 205px;
@@ -417,124 +385,8 @@ body {
 	margin-bottom: 5px;
 }
 
-.reaction ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-    display: table;
-}
-
-
-.reaction ul li {
-	justify-content: center;
-    align-items: center;
-    padding: 6px;
-    margin: 0px 20px;
-    display: table-cell;
-    flex-direction: row;
-    list-style-type: none;
-    cursor: pointer;
-    border: 1px solid #fff;
-    white-space: nowrap;
-    width: 33%;
-}
-
-.reaction ul li:hover {
-	background-color: #eee;
-	border: 1px solid #eee;
-}
-
-.reaction-like:before {
-	content: "\f004";
-    font-family: "Font Awesome 5 Free";
-	font-weight: 900;
-}
-
-.reaction-nonlike:before {
-	content: "\f004";
-    font-family: "Font Awesome 5 Free";
-	font-weight: 500;
-}
-
-.reaction-comment:before {
-	content: "\f4ad";
-    font-family: "Font Awesome 5 Free";
-	font-weight: 500;
-}
-
-.reaction-share:before {
-	content: "\f1e0";
-    font-family: "Font Awesome 5 Free";
-	font-weight: 900;
-}
-
-.reaction-like span,
-.reaction-nonlike span,
-.reaction-comment span {
-    font-size: 12px;
-    position: absolute;
-    margin-left: 5px;
-}
-
-.reaction-like span {
-	color: #FF0000;	
-	font-weight: 600;
-}
-.reaction-nonlike span {
-	color: inherit;
-	font-weight: 400;
-}
 hr {
 	margin: 5px 10px !important;
-}
-
-.frmComment .content_comment {
-    width: 100%;
-    height: 40px;
-    border: 1px solid #fff;
-    background-color: #eee;
-    padding-left: 15px;
-    margin-left: 5px;
-    border-radius: 20px !important;
-}
-
-.new-comment {
-	padding: 12px 12px 5px 10px;
-	display: table;
-}
-
-.new-comment #comment {
-	display: table-cell;
-	width: 100%;
-}
-
-.show-comment {
-	padding: 10px 12px 10px;
-}
-
-.show-comment .detail-comment {
-	display: table;
-}
-
-.show-comment .detail-comment #icon {
-
-}
-
-.show-comment .detail-comment #content {
-	display: table-cell;
-    border: 1px solid #fff;
-    background-color: #eee;
-    border-radius: 20px;
-    width: fit-content;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
-.show-comment #user-comment {
-	font-weight: 600;
-    font-size: 16px;
 }
 
 .status {
@@ -542,7 +394,7 @@ hr {
     position: relative;
     border: 1px solid #dddfe2;
     border-radius: 10px;
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
     margin-bottom: 10px;
     background: #eee;
@@ -569,7 +421,7 @@ hr {
 
 
 
-/*.status input[type="submit"] {
+.status input[type="submit"] {
 	position: absolute;
 	display: inline-block;
     padding: 10px 50px;
@@ -578,7 +430,7 @@ hr {
 	top: 0;
 	right: 0;
 	margin: 10px;
-}*/
+}
 
 .status .status-extra-content {
 	display: inline-flex;
@@ -616,14 +468,16 @@ hr {
 }
 
 .status .status-extra-content #btnSubmit:hover {
-	background-color: #ddd;
-	color: #337ab7;
+	background-color: #2b6597;
+	color: #ffffff;
 	border: 1px solid #fff;
 }
 
 
 #status-image {
-	display: none;
+	border: none;
+    background-color: #eee;
+    box-shadow: none;
 }
 
 .status .status-submit {
@@ -661,9 +515,6 @@ hr {
 	display: contents;
 }
 
-.hide-comment-status {
-	display: none;
-}
 
 .listfriend {
     position: fixed;
@@ -736,7 +587,7 @@ hr {
     max-width: 800px;
     margin: 0 auto;
     margin-bottom: 10px;
-    background-image: radial-gradient(ellipse farthest-side at right top, #959595 0%, #191919 46%, #010101 50%, #0F0F0F 53%, #303030 76%, #383838 87%, #545454 100%);
+    background-image: radial-gradient(ellipse farthest-side at right top, #959595 0%, #00eeff 46%, #0ff7f7 50%, rgb(19, 201, 247) 53%, #02a8a8 76%, #11d4ee 87%, #00ecfd 100%);
 }
 
 .user-info .info-title img {

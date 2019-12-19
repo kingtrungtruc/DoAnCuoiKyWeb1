@@ -24,23 +24,53 @@ if (isset($_COOKIE['login'])) {
 <div class="alert alert-danger" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
 
 <!-- LOGIN -->
-<form class="frmLogin" action="" method="POST">
-    <div class="form-group">
-        <label for="usename">Email:</label>
-        <input type="email" name="username" class="form-control" maxlength="255" required>
+<div class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a><b>ĐĂNG NHẬP</b></a>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form method="POST" action="">
+                    <div class="input-group form-float">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="email" class="form-control" name="username" placeholder="Email đăng nhập..." required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu..." required>
+                        </div>
+                    </div>
+                    <div class="p-t-5">
+                        <input type="checkbox" name="remember" id="remember" class="filled-in chk-col-pink">
+                        <label for="remember">Ghi nhớ</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-block bg-pink waves-effect">Đăng nhập</button>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-xs-12">
+                            Chưa có tài khoản?
+                            <a href="register.php" title="Đăng ký tài khoản" target="_parent"> Đăng ký</a>
+                        </div>
+                        <div class="col-xs-12">
+                            <a href="forgot_password.php" title="Quên mật khẩu" target="_parent">Quên mật khẩu?</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-	<div class="form-group">
-		<label for="password">Mật khẩu:</label>
-		<input type="password" name="password" class="form-control" required>
-	</div>
-	<div class="form-group">
-		<input type="checkbox" name="remember" class="form-check-input" id="remember">
-		<label for="remember">Nhớ mật khẩu</label>
-	</div>
-       <div class="submit-group">
-           <button type="submit" class="btn btn-success">Đăng nhập</button>
-           <a href="register.php" title="Đăng ký tài khoản" target="_parent">Đăng ký</a> <br>
-           <a href="forgot_password.php" title="Quên mật khẩu" target="_parent">Quên mật khẩu ?</a>
-       </div>
-</form>
+</div>
 <?= $formatHelper->closeFooter() ?>

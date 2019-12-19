@@ -29,26 +29,65 @@ if (isset($_COOKIE['login'])) {
 <div <?= @$display ?: "class='alert alert-$style' style='display:none;text-align: center;'"?>> <?= @$message?: "" ?> </div>
 
 <!-- REGISTER -->
-<form class="frmReg" action="" method="POST">
-    <div class="form-group">
-        <label for="usename">Email:</label>
-        <input type="email" name="username" class="form-control" maxlength="255" required>
+<div class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a><b>ĐĂNG KÝ</b></a>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form method="POST" action="">
+                    <div class="input-group form-float">
+                        <span class="input-group-addon">
+                            <i class="material-icons">people</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-line" name="realname" placeholder="Họ và tên..." required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group form-float">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="email" class="form-control" name="username" placeholder="Email..." required
+                                autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu..."
+                                required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" name="re-password" placeholder="Nhập lại mật khẩu..."
+                                required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-block bg-pink waves-effect">Đăng ký</button>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                    <div class="row m-t-15 m-b--20 text-center">
+                        <div class="col-xs-12">
+                            Đã có tài khoản! 
+                            <a href="login.html">Đăng nhập</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="realname">Username:</label>
-        <input type="text" name="realname" class="form-control" maxlength="255" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Mật khẩu:</label>
-        <input type="password" name="password" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <label for="password">Nhập lại mật khẩu:</label>
-        <input type="password" name="re-password" class="form-control" required>
-    </div>
-    <div class="submit-group">
-        <button type="submit" class="btn btn-warning">Đăng ký</button>
-        <a href="login.php" title="Đăng nhập hệ thống" target="_parent">Đăng nhập</a>
-    </div>
-</form>
+</div>
 <?= $formatHelper->closeFooter(); ?>

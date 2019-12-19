@@ -24,12 +24,11 @@ $postEntities = $user->SearchPosts($_COOKIE['login'], "");
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
     <?= $formatHelper->addFixMenu() ?>
-
-    <div class="main">
-        <div class="content">
-            <?= $formatHelper->addStatus() ?>
-            <?= $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']); ?>
-        </div>
-        <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
-    </div>
+    <?= $formatHelper->addLeftMenu($_COOKIE['login'],'lightgreen') ?>
+ 
+    <?= $formatHelper->addStatus() ?>
+    <?= $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']); ?>
+        
+    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
+    
 <?= $formatHelper->closeFooter() ?>
