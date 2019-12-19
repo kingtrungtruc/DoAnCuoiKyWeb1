@@ -49,7 +49,7 @@ if (isset($_COOKIE['login'])) {
                         </div>
                     </div>
                     <div class="p-t-5">
-                        <input type="checkbox" name="remember" id="remember" class="filled-in chk-col-pink">
+                        <input type="checkbox" name="remember" id="remember" class="filled-in chk-col-pink" value="Yes">
                         <label for="remember">Ghi nhớ</label>
                     </div>
                     <div class="row">

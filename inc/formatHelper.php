@@ -182,6 +182,26 @@ FIXMENU;
         $id = $usr['user_id'];
         $name = $usr['user_displayname'];
 
+        $countFollowing = $user->CountListFriends($username, 'user_following');
+        $countFollows = $user->CountListFriends($username, 'user_follows');
+
+        $countAllUser = 0;
+        $users = $user->ListUsers();
+
+        // get list follow of user
+        $info = $user->GetUser($username);
+        $followed = !empty($info['user_followed']) ? unserialize($info['user_followed']) : [];
+        $following = !empty($info['user_following']) ? unserialize($info['user_following']) : [];
+        $follows = !empty($info['user_follows']) ? unserialize($info['user_follows']) : [];
+
+        foreach ($users as $usr) {
+            if ($username === $usr['user_email']) continue;
+
+            if (in_array($usr['user_id'], $followed) || in_array($usr['user_id'], $follows) || in_array($usr['user_id'], $following)) continue;
+
+            $countAllUser ++;
+        }
+
         $this->leftMenu =<<<LEFTMENU
         <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
             <div class="row">
@@ -189,12 +209,24 @@ FIXMENU;
                     <div class="fix-left-menu">
                         <h4 class="text-center"><a href="profile.php?id=$id">$name</a></h4>                
                         <ul class="list-group list-group-flush"> 
-                            <a href="change_profile.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-pencil"></span> Đổi thông tin </li></a>   
-                            <a href="change_password.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-wrench"></span> Đổi mật khẩu </li></a>   
-                            <a href="message.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">5</span></li></a>
-                            <a href="following.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">3</span></li></a>
-                            <a href="follows.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-user"></span> Chờ phản hồi <span class="badge">3</span></li></a>
-                            <a href="all_user.php"><li class="list-group-item menu-hover"><span class="glyphicon glyphicon-search"></span> Có thể bạn biết <span class="badge">7</span></li></a>               
+                            <a href="change_profile.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-pencil"></span> Đổi thông tin </li>
+                            </a>   
+                            <a href="change_password.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-wrench"></span> Đổi mật khẩu </li>
+                            </a>   
+                            <a href="message.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">5</span></li>
+                            </a>
+                            <a href="following.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">$countFollowing</span></li>
+                            </a>
+                            <a href="follows.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-user"></span> Lời mời kết bạn <span class="badge">$countFollows</span></li>
+                            </a>
+                            <a href="all_user.php">
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-search"></span> Có thể bạn biết <span class="badge">$countAllUser</span></li>
+                            </a>               
                         </ul> 
                     </div>  
                 </div>

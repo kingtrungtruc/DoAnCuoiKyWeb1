@@ -14,7 +14,6 @@ if (isset($_POST['type']) && $_POST['type'] == "like") {
 
     // Valid user comment
     if ((strcmp(gettype($info), 'string') == 0) && strcmp('Tài khoản không hợp lệ', $info) == 0) {
-
     	$result['status'] = 404;
     	$result['respText'] = $info;
     } else {	
@@ -22,7 +21,7 @@ if (isset($_POST['type']) && $_POST['type'] == "like") {
     	$status = new StatusController();
 
     	// User like comment
-    	$message = $status->LikeForStatus($info['id'], $_POST['id_status']);
+    	$message = $status->LikeForStatus($info['user_id'], $_POST['id_status']);
 
     	$message = 'Thành công';
     	$result['respText'] = $message;
@@ -40,7 +39,6 @@ if (isset($_POST['type']) && $_POST['type'] == "like") {
 
     // Valid user comment
     if ((strcmp(gettype($info), 'string') == 0) && strcmp('Tài khoản không hợp lệ', $info) == 0) {
-
     	$result['status'] = 404;
     	$result['respText'] = $info;
     } else {	
@@ -48,7 +46,7 @@ if (isset($_POST['type']) && $_POST['type'] == "like") {
     	$status = new StatusController();
 
     	// User like comment
-    	$message = $status->UnLikeForStatus($info['id'], $_POST['id_status']);
+    	$message = $status->UnLikeForStatus($info['user_id'], $_POST['id_status']);
 
     	$message = 'Thành công';
     	$result['respText'] = $message;

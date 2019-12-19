@@ -20,7 +20,7 @@ class UserController
         db::connect();
     }
 
-    private function setCookie($username, $realname, $remember = "on")
+    private function setCookie($username, $realname, $remember)
     {
         if ($remember == 'on') {
             $time = 3600 * 24; // 24 hours
@@ -80,10 +80,16 @@ class UserController
             $sqlUpdate = "UPDATE users SET user_lastlogin = now() WHERE user_email = ?";
             $data = db::$connection->prepare($sqlUpdate);
             if ($data->execute([$usr['user_email']])) {
-
-                if ($this->setCookie($usr['user_email'], $usr['user_displayname'])) {
-                    return 1;
+                if(isset($this->request['remember']) && $this->request['remember'] == 'Yes'){
+                    if ($this->setCookie($usr['user_email'], $usr['user_displayname'], 'on')) {
+                        return 1;
+                    }
+                }else{
+                    if ($this->setCookie($usr['user_email'], $usr['user_displayname'], 'off')) {
+                        return 1;
+                    }
                 }
+                
             }
             return "Đăng nhập thất bại";
         } catch (PDOException $ex) {
@@ -382,6 +388,7 @@ class UserController
             throw new PDOException($ex->getMessage());
         }
     }
+    
     public function LoadNewsfeed($username)
     {
         try {
@@ -460,6 +467,39 @@ class UserController
                 }
             }
             return $friends;
+        } catch (PDOException $ex) {
+            throw new PDOException($ex->getMessage());
+        }
+    }
+
+    public function CountListFriends($username, $follow = 'user_followed')
+    {
+        // valid params
+        if (empty($username)) {
+            return "Nhập đầy đủ thông tin";
+        }
+
+        try {
+            $usr = $this->GetUser($username);
+            if ($usr['user_email'] != $username) {
+                return "Không tồn tại tên đăng nhập";
+            }
+
+            $followsID = !empty($usr[$follow]) ? unserialize($usr[$follow]) : [];
+            $friends = [];
+
+            // get user info by id
+            foreach($followsID as $id) {
+
+                // prepare string select list friends
+                $sqlSelect = "SELECT * FROM users WHERE user_id = ?";
+                $data = db::$connection->prepare($sqlSelect);
+                if ($data->execute([$id])) {
+                    $row = $data->fetchAll();
+                    $friends = array_merge($friends, $row);
+                }
+            }
+            return count($friends);
         } catch (PDOException $ex) {
             throw new PDOException($ex->getMessage());
         }

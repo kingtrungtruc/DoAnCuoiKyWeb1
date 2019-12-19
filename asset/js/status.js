@@ -102,19 +102,19 @@ $(document).ready(() => {
 
 					// append new element comment
 					let element = `
-					    <div class="detail-comment">
-					        <span id="icon">
-					            <img src='${result.avatar}' alt='icon'>
-					        </span>
-					        <span id="content">
-					            <span id="user-comment">
-					                <a href="profile.php?id=${result.id_user}"> ${result.name} </a>
-					            </span>
-					            <span id="content-commment">
-					                ${result.content}
-					            </span> 
-					        </span>
-					    </div>
+						<div class="detail-comment">
+                            <div id="icon">
+                                <img src='${result.avatar}' alt="icon" title='${result.name}'>
+                            </div>
+                            <div class="content">
+                                <span id="user-comment">
+                                    <a href="profile.php?id=${result.id_user}"> ${result.name} </a>
+                                </span>
+                                <span id="content-commment">
+									${result.content}
+                                </span> 
+                            </div>
+                        </div>
 					    `;	
 
 					$('#show-comment-'+id).append(element);
@@ -137,49 +137,8 @@ $(document).ready(() => {
 				console.log(err);
 			}
 		});
-	})
-})
-
-function BeautifullyTimeStatus(current, previous) {
-
-    var msPerMinute = 60 * 1000;
-    var msPerHour = msPerMinute * 60;
-    var msPerDay = msPerHour * 24;
-    var msPerMonth = msPerDay * 30;
-    var msPerYear = msPerDay * 365;
-
-    // seconds different
-    var elapsed = current - previous;
-
-    if (elapsed < msPerMinute) {
-    	if (Math.round(elapsed/1000) > 0) {
-	         return Math.round(elapsed/1000) + ' seconds ago';   
-    	} else {
-    		return 'just now';
-    	}
-    }
-
-    else if (elapsed < msPerHour) {
-         return Math.round(elapsed/msPerMinute) + ' minutes ago';   
-    }
-
-    else if (elapsed < msPerDay ) {
-         return Math.round(elapsed/msPerHour ) + ' hours ago';   
-    }
-
-    else if (elapsed < msPerMonth) {
-        return Math.round(elapsed/msPerDay) + ' days ago';   
-    }
-
-    else if (elapsed < msPerYear) {
-        return Math.round(elapsed/msPerMonth) + ' months ago';   
-    }
-
-    else {
-        return Math.round(elapsed/msPerYear ) + ' years ago';   
-    }
-}
-
+	});
+});
 
 function LikeStatus(id) {
 
@@ -268,4 +227,44 @@ function UnLikeStatus(id) {
 			console.log(err);
 		}
 	})
+}
+
+function BeautifullyTimeStatus(current, previous) {
+
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+
+    // seconds different
+    var elapsed = current - previous;
+
+    if (elapsed < msPerMinute) {
+    	if (Math.round(elapsed/1000) > 0) {
+	         return Math.round(elapsed/1000) + ' giây trước';   
+    	} else {
+    		return 'Vừa xong';
+    	}
+    }
+
+    else if (elapsed < msPerHour) {
+         return Math.round(elapsed/msPerMinute) + ' phút trước';   
+    }
+
+    else if (elapsed < msPerDay ) {
+         return Math.round(elapsed/msPerHour ) + ' giờ trước';   
+    }
+
+    else if (elapsed < msPerMonth) {
+        return Math.round(elapsed/msPerDay) + ' ngày trước';   
+    }
+
+    else if (elapsed < msPerYear) {
+        return Math.round(elapsed/msPerMonth) + ' tháng trước';   
+    }
+
+    else {
+        return Math.round(elapsed/msPerYear ) + ' năm trước';   
+    }
 }
