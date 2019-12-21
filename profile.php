@@ -92,7 +92,7 @@ $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2
         <form action="follows.php" method="POST">
             <input type="hidden" name="name" value="<?= $user2['user_email']?>">
                 <button type="submit" class="btn btn-success" name="acceptFriend">Chấp nhận</button>
-                <button type="submit" class="btn btn-warning" name="declineFriend">Từ chối</button>
+                <button type="submit" class="btn btn-danger" name="declineFriend">Từ chối</button>
         <?php
                 }
                 if($followed){

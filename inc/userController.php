@@ -505,6 +505,38 @@ class UserController
         }
     }
 
+    //gửi email khi có lời mời kết bạn
+    public function SendEmailAddFriend($email,$id)
+    {
+        $user_email = $this->GetUser('', $id);
+        $name = $user_email['user_displayname'];
+        $mail = new PHPMailer(true);
+        try {
+            //Server settings
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->CharSet = 'UTF-8';
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'testwebltt@gmail.com';                 // SMTP username
+            $mail->Password = 'testwebltt97@';                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                    // TCP port to connect to
+        
+            //Recipients
+            $mail->setFrom('testwebltt@gmail.com', 'Web 1');
+            $mail->addAddress($email);     //
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Lời mời kết bạn';
+            $mail->Body    = "$name vừa gửi lời mời kết bạn cho bạn, nhấp vào link để đến trang cá nhân của $name: <a href='http://$_SERVER[HTTP_HOST]/Web1/LT/DoAnCuoiKyWeb1/profile.php?id=$id'>http://$_SERVER[HTTP_HOST]/Web1/LT/DoAnCuoiKyWeb1/confirm.php?profile.php?id=$id</a>";
+
+            $mail->send();
+            return "Đã gửi lời kết bạn !";
+        } catch (Exception $e) {
+            return 'Không thể gửi mail. Mailser Error: '. $mail->ErrorInfo;
+        }
+    }
+
     public function AddFriend($userA, $userB)
     {
         //
@@ -560,7 +592,7 @@ class UserController
             if (!$data->execute([serialize($followsB), $userB])) {
                 return "Không thể gửi yêu cầu kết bạn, có lỗi xảy ra";
             }
-            return "Đã gửi lời kết bạn !";
+            return $this->SendEmailAddFriend($userB, $idA);
         } catch (PDOException $ex) {
             throw new PDOException($ex->getMessage());
         }
