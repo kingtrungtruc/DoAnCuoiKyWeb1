@@ -146,7 +146,7 @@ FOOTER;
                     <a class="navbar-brand" href="dashboard.php" id="trangchu-hover">Trang chủ</a>
                 </div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4" style="text-align: center;">
-                    <form class="navbar-form" action="search.php">
+                    <form class="navbar-form" action="search.php" method="GET">
                         <div class="form-group">
                             <input type="search" class="form-control" placeholder="Nhập tên hoặc email..." name="keyword">
                         </div>
@@ -300,7 +300,7 @@ STATUS;
         $status = new StatusController();
         $currentUser = $user->GetUser($username);
 
-
+        $this->newsfeed = "";
         foreach ($contents as $content) {
 
             // real-name & avatar
@@ -321,11 +321,11 @@ STATUS;
             // role status
             $role = "fas fa-globe-asia";
             if (strcmp($content['status_role'], 'Công khai') == 0)
-                $role = 'fas fa-globe-asia';
+                $role = '<span class="fas fa-globe-asia"></span>';
             if (strcmp($content['status_role'], 'Bạn bè') == 0)
-                $role = 'fas fa-user';
+                $role = '<span class="fas fa-user"></span>';
             if (strcmp($content['status_role'], 'Chỉ mình tôi') == 0)
-                $role = 'far fa-eye-slash';
+                $role = '<span class="far fa-eye-slash"></span>';
 
             // like or unlike
             $amountLike = $status->AmountOfLiked($content['status_id']);
@@ -355,11 +355,14 @@ STATUS;
                 <div id="$content[status_id]">
                     <div class="card-header">
                         <div class="new-title">
-                            <img src='$src' alt="logo" title='$name'> 
+                            <a href="profile.php?id=$id_user">
+                                <img src='$src' alt="logo" title='$name'> 
+                            </a>
                             <h4 id="user">
-                                <a href="profile.php?id=$id_user">$name</a>                
+                                <a href="profile.php?id=$id_user">$name</a> 
+                                <span title="$content[status_role]">&nbsp;&nbsp;$role</span>               
                             </h4>                                
-                            <span title='$content[status_created]'><i>$content[status_created]<span title="$content[status_role]">&nbsp;&nbsp;<span class=$role></span></span></i></span>
+                            <span title='$content[status_created]'><i>$content[status_created]</i></span>
                         </div>
                     </div>
                     <div class="card-body">
@@ -372,7 +375,7 @@ STATUS;
                             <ul>
                                 <li style="display: $like" class='reaction-like' id="reaction-like-$content[status_id]"> &nbsp;Đã thích <span id="numlike-$content[status_id]">$amountLike</span></li>
 
-                                <li style="display: table-cell" class='reaction-nonlike' id="reaction-nonlike-$content[status_id]"> &nbsp;Thích <span id="numnonlike-$content[status_id]">$amountLike</span></li>
+                                <li style="display: $nonlike" class='reaction-nonlike' id="reaction-nonlike-$content[status_id]"> &nbsp;Thích <span id="numnonlike-$content[status_id]">$amountLike</span></li>
 
                                 <li class="reaction-comment" id="reaction-comment-$content[status_id]">&nbsp;Bình luận <span id="numcom-$content[status_id]">$amountComment</span></li>
 
@@ -519,6 +522,48 @@ LISTUSER;
 
         return $this->friend;
     }
+
+    /**
+     * Giao diện liệt kê tất cả user hiện có
+     * @param [type] $username [description]
+     */
+    public function ListUsersAll($username)
+    {
+        $this->friend = "";
+        $user = new UserController();
+        $users = $user->ListUsers();
+
+        // get list follow of user
+        $info = $user->GetUser($username);
+        $followed = !empty($info['user_followed']) ? unserialize($info['user_followed']) : [];
+        $following = !empty($info['user_following']) ? unserialize($info['user_following']) : [];
+        $follows = !empty($info['user_follows']) ? unserialize($info['user_follows']) : [];
+
+        foreach ($users as $usr) {
+            if ($username === $usr['user_email']) continue;
+
+            if (in_array($usr['user_id'], $followed) || in_array($usr['user_id'], $follows) || in_array($usr['user_id'], $following)) continue;
+
+            // real-name & avatar
+            $name = !empty($usr['user_displayname']) ? $usr['user_displayname'] : $usr['user_email'];
+            $src = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png";
+            $id = $usr['user_id'];
+            //content list user html
+            $this->friend .=<<<LISTUSERALL
+<li>
+    <form action="profile.php?id=$id" method="POST">
+        <img src=$src alt="avatar" title="$name">
+        <h2>$name</h2>
+        <input name="name" value=$usr[user_email] hidden>
+        <a href="profile.php?id=$id"><button class='btn btn-primary'>Trang cá nhân</button></a>
+    </form>
+</li>
+LISTUSERALL;
+        }
+
+        return $this->friend;
+    }
+
 
     /**
      * Giao diện liệt kê tất cả Friend hiện có
@@ -727,25 +772,35 @@ FORM_NEW_PASSWORD;
         $user = new UserController();
         $listUser = $user->SearchUsersByName($name);
         if(count($listUser) == 0) {
-            return null;
+            return "";
         }
-
+        $this->users .=<<<SEARCHUSER
+<div class="tab-content">
+    <ul class="global">
+SEARCHUSER;
         foreach ($listUser as $usr) {
 
             // real-name & avatar
             $name = !empty($usr['user_displayname']) ? $usr['user_displayname'] : $usr['user_email'];
             $src = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png";
+            $id = $usr['user_id'];
 
             $this->users .=<<<SEARCHUSER
         <!-- Status -->
-        <div class="new-title">
-            <img src="$src" alt="logo"> 
-            <h4 id="user"><a href="profile.php?id=$usr[id]">$name</a></h4>
-            <span>&nbsp;&nbsp;</span>
-            <span title="$usr[created]"><i>$usr[created]</i></span>
-        </div>
+        <li>
+            <form action="profile.php?id=$id" method="POST">
+                <img src=$src alt="avatar" title="$name">
+                <h2>$name</h2>
+                <input name="name" value=$usr[user_email] hidden>
+                <a href="profile.php?id=$id"><button class='btn btn-primary'>Trang cá nhân</button></a>
+            </form>
+        </li>
 SEARCHUSER;
         }
+        $this->users .=<<<SEARCHUSER
+    </ul>
+</div>
+SEARCHUSER;
         
         return $this->users;
     }

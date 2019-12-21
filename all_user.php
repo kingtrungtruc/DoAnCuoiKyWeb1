@@ -5,14 +5,6 @@ require_once 'inc/autoload.php';
 // Format Helper
 $formatHelper = new FormatHelper();
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $user = new UserController();
-    $message = $user->UpdateProfile($_COOKIE['login'], $_FILES, $_POST);
-    $display = "style='display: block; text-align: center;'";
-}
-
-
-// DIRECTION
 if (!isset($_COOKIE['login'])) {
     header('Location: index.php');
 }
@@ -22,13 +14,14 @@ if (!isset($_COOKIE['login'])) {
 <?= $formatHelper->addFixMenu() ?>
 <?= $formatHelper->addLeftMenu($_COOKIE['login'],'turquoise') ?>
 <div class="row">
+    <h3 class="text-center">Có thể bạn biết</h3>
     <div class="tab-content">
         <ul class="global">
-            <?php if($formatHelper->ListUsers($_COOKIE['login']) == ""){
+            <?php if($formatHelper->ListUsersAll($_COOKIE['login']) == ""){
                 echo "Tất cả đều là bạn bè hoặc bạn chưa chấp nhận lời mời kết bạn!";
             } else{ 
             ?>
-                <?= $formatHelper->ListUsers($_COOKIE['login']);} ?>
+                <?= $formatHelper->ListUsersAll($_COOKIE['login']);} ?>
         </ul>
     </div>
 </div>

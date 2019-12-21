@@ -9,6 +9,17 @@ $status = new StatusController();
 if (!isset($_COOKIE['login'])) {
     header('Location: index.php');
 }
+$style = 'danger';
+$message = "";//Thông báo KQ từ server trả về
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $user = new UserController();
+    
+    if (isset($_POST['unFriend'])) {
+        $message = $user->DeleteFriend($_COOKIE['login'], $_POST['name']);
+        $style = 'info';
+    } 
+    $display = "class='alert alert-$style' style='display: block; text-align: center;'";
+}
 
 $id_user2 = $_GET['id'];
 $user2 = $user->GetUser('',$id_user2);
@@ -58,40 +69,48 @@ $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
 <?= $formatHelper->addLeftMenu($_COOKIE['login'], 'gold') ?>
-
+<?php if($message != ""){ ?>
+    <div <?= @$display ?: "class='alert alert-$style' style='display:none;text-align: center;'"?>> <?= @$message?: "" ?> </div>
+<?php } ?>
 <div class="user-info">
     <div class="info-title">
         <span><img src="<?= $user2_avatar?>"/></span>
         <span id="name"><?=$user2['user_displayname']?></span>
     </div>
     <div class="info-body">
-        <form action="friends.php" method="POST">
-            <input type="hidden" name="user_email" value="<?= $user2['user_email']?>">
-            <?php
-                if($id_user2 != $id_user1){
-                    if($noRelationship){
-            ?>
-                        <button type="submit" class="btn btn-success" name="addFriend">Thêm bạn bè</button>
-            <?php
-                    }
-                    if($follows){
-            ?>
-                        <button type="submit" class="btn btn-success" name="acceptFriend">Chấp nhận</button>
-                        <button type="submit" class="btn btn-warning" name="declineFriend">Từ chối</button>
-            <?php
-                    }
-                    if($followed){
-            ?>
-                        <button type="submit" class="btn btn-danger" name="unFriend">Hủy kết bạn</button>
-            <?php
-                    }
-                    if($following){
-            ?>
-                        <button type="submit" class="btn btn-warning" name="delete-friend">Bỏ theo dõi</button>
-            <?php
-                        }
-                    }
-            ?>
+        <?php
+            if($id_user2 != $id_user1){
+                if($noRelationship){
+        ?>
+        <form action="following.php" method="POST">
+            <input type="hidden" name="name" value="<?= $user2['user_email']?>">
+                <button type="submit" class="btn btn-success" name="addFriend">Thêm bạn bè</button>
+        <?php
+                }
+                if($follows){
+        ?>
+        <form action="follows.php" method="POST">
+            <input type="hidden" name="name" value="<?= $user2['user_email']?>">
+                <button type="submit" class="btn btn-success" name="acceptFriend">Chấp nhận</button>
+                <button type="submit" class="btn btn-warning" name="declineFriend">Từ chối</button>
+        <?php
+                }
+                if($followed){
+        ?>
+        <form action="" method="POST">
+            <input type="hidden" name="name" value="<?= $user2['user_email']?>">
+                <button type="submit" class="btn btn-danger" name="unFriend">Hủy kết bạn</button>
+        <?php
+                }
+                if($following){
+        ?>
+        <form action="following.php" method="POST">
+            <input type="hidden" name="name" value="<?= $user2['user_email']?>">
+                <button type="submit" class="btn btn-warning" name="delete-friend">Bỏ theo dõi</button>
+        <?php
+                }
+            }
+        ?>
         </form>
     </div>
 </div> 

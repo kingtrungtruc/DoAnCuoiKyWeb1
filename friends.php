@@ -36,9 +36,8 @@ if (!isset($_COOKIE['login'])) {
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
+<?= $formatHelper->addLeftMenu($_COOKIE['login'], 'lavender') ?>
 
-<div class="main">
-    <div class="content">
         <div class="alert alert-info" <?= @$display ?: "style='display:none; text-align: center;'"?>><center><?= @$message?: "" ?></center></div>
 
         <!-- FRIENDS LIST & REQUEST -->
@@ -81,6 +80,5 @@ if (!isset($_COOKIE['login'])) {
             </div>
         </div>
     </div>
-    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
-</div>
+<?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>

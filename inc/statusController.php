@@ -97,7 +97,7 @@ class StatusController
         try {
             $sqlSelect = "SELECT * FROM status as stt, users as u WHERE stt.status_content LIKE ? AND (stt.status_id = u.user_id AND u.user_id = ? AND u.user_followed LIKE ? AND stt.status_role IN ('Bạn bè')) ORDER BY stt.status_created";
             $data = db::$connection->prepare($sqlSelect);
-            if ($data->execute(array('%'.$keyword.'%', $friendId, '%'.$userId.'%'))) {
+            if ($data->execute(array('%' . $keyword . '%', $friendId, '%' . $userId . '%'))) {
                 $row = $data->fetchAll(PDO::FETCH_ASSOC);
                 return $row;
             }

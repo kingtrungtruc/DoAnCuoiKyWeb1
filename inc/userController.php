@@ -752,7 +752,7 @@ class UserController
             if (!$data->execute([serialize($followedB), serialize($followingB), $userB])) {
                 return "Không thể xóa bạn bè, có lỗi xảy ra";
             }
-            return "Hủy làm bạn thành công !";
+            return "Hủy làm bạn thành công!";
         } catch (PDOException $ex) {
             throw new PDOException($ex->getMessage());
         }
@@ -763,7 +763,8 @@ class UserController
         //
         // A ----unFollowing-----> B
         //
-        $this->DeclineFriend($userB,$userA);
+        // valid params
+        return $this->DeclineFriend($userB,$userA);
     }
 
     public function ListUsers()
@@ -787,8 +788,9 @@ class UserController
             // prepare string select username
             $sqlSelect = "SELECT * FROM users WHERE user_email LIKE ? OR user_displayname LIKE ? LIMIT 100";
             $data = db::$connection->prepare($sqlSelect);
-            if ($data->execute(array('%'.$name.'%', '%'.$name.'%'))) {
-                return $data->fetchAll(PDO::FETCH_ASSOC);
+            if ($data->execute(array('%' . $name . '%', '%' . $name . '%'))) {
+                $row = $data->fetchAll(PDO::FETCH_ASSOC);
+                return $row;
             }
             return "Có lỗi xảy ra";
         } catch (PDOException $ex) {
@@ -833,63 +835,3 @@ class UserController
     }
     
 }
-
-
-//$work = new UserController();
-
-
-//echo "<pre>";
-//print_r($work->ListUsers());
-//echo "</pre>";
-
-
-
-//$message = $work->AddFriend('danIT', 'admin');
-//
-//if ($message === 1)
-//{
-//    echo "Gửi kết bạn thành công";
-//} else {
-//    echo $message;
-//}
-
-
-
-//$message = $work->AcceptFriend('admin', 'anhvietcr');
-//
-//if ($message === 1)
-//{
-//    echo "Chấp nhận kết bạn thành công";
-//} else {
-//    echo $message;
-//}
-
-
-
-//$message = $work->DeclineFriend('danIT', 'admin');
-//
-//if ($message === 1)
-//{
-//    echo "Từ chối yêu cầu kết bạn thành công";
-//} else {
-//    echo $message;
-//}
-
-//$message = $work->DeleteFriend('anhvietcr', 'admin');
-//
-//if ($message === 1)
-//{
-//    echo "Xóa bạn bè thành công";
-//} else {
-//    echo $message;
-//}
-
-//$message = $work->ListFriends('admin', 'following');
-//
-//if (count($message) > 0) {
-//    echo "<pre>";
-//    print_r($message);
-//    echo "</pre>";
-//} else {
-//    echo "Not found";
-//}

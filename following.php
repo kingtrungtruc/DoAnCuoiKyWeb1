@@ -5,16 +5,25 @@ require_once 'inc/autoload.php';
 // Format Helper
 $formatHelper = new FormatHelper();
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $user = new UserController();
-    $message = $user->UpdateProfile($_COOKIE['login'], $_FILES, $_POST);
-    $display = "style='display: block; text-align: center;'";
-}
-
-
 // DIRECTION
 if (!isset($_COOKIE['login'])) {
     header('Location: index.php');
+}
+$style = 'danger';
+//$_SERVER['REQUEST_METHOD' => Xác định request gửi đến server con đường nào (post,get,patch,delete)
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    $user = new UserController();
+    $message = "";//Thông báo KQ từ server trả về
+
+    if (isset($_POST['addFriend'])) {
+        $message = $user->AddFriend($_COOKIE['login'], $_POST['name']);
+        $style = 'info';
+    }else if (isset($_POST['unFollowing'])){
+        $message = $user->unFollowing($_COOKIE['login'], $_POST['name']);
+        $style = 'info';
+    }
+
+    $display = "class='alert alert-$style' style='display: block; text-align: center;'";
 }
 ?>
 
@@ -22,6 +31,9 @@ if (!isset($_COOKIE['login'])) {
 <?= $formatHelper->addFixMenu() ?>
 <?= $formatHelper->addLeftMenu($_COOKIE['login'],'turquoise') ?>
 <div class="row">
+    <h3 class="text-center">Đang theo dõi</h3>
+
+    <div <?= @$display ?: "class='alert alert-$style' style='display:none;text-align: center;'"?>> <?= @$message?: "" ?> </div>
     <div class="tab-content">
         <ul class="global">
             <?php if($formatHelper->ListFollowing($_COOKIE['login']) == ""){

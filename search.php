@@ -12,17 +12,17 @@ $postEntities = null;
 $posts = null;
 $users = null;
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $message = "";
 
-    if (isset($_POST['keyword']) || isset($_POST['search'])) {
-        $users = $formatHelper->SearchUser((!isset($_POST['keyword']) ? null : $_POST['keyword']));
-        $postEntities = $user->SearchPosts($_COOKIE['login'], (!isset($_POST['keyword']) ? null : $_POST['keyword']));
+    if (isset($_GET['keyword']) || isset($_GET['search'])) {
+        $users = $formatHelper->SearchUser((!isset($_GET['keyword']) ? null : $_GET['keyword']));
+        $postEntities = $user->SearchPosts($_COOKIE['login'], (!isset($_GET['keyword']) ? null : $_GET['keyword']));
         $posts = $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']);
     }
 
-    if (count($posts) == 0 && count($users) == 0) {
-        $message = "Not found!!";
+    if ($posts == "" && $users == "") {
+        $message = "Không tìm thấy kết quả nào phù hợp!";
         $display = "style='display: block; text-align: center;'";
     }
 }
@@ -39,24 +39,25 @@ if (!isset($_COOKIE['login'])) {
 <?= $formatHelper->addLeftMenu($_COOKIE['login'],'lightgreen') ?>
 
 <div>
+    <div class="content">
     <div class="alert alert-info" <?= @$display ? : "style='display:none; text-align: center;'" ?>><center><?= @$message ? : "" ?></center></div>
         <div id="btnFilters">
-            <button class="btn active" onclick="filterSelection('all')"> Show all</button>
-            <button class="btn" onclick="filterSelection('users')"> Users</button>
-            <button class="btn" onclick="filterSelection('status')"> Status</button>
+            <button class="btn active" onclick="filterSelection('all')"> Tất cả</button>
+            <button class="btn" onclick="filterSelection('users')"> Người dùng</button>
+            <button class="btn" onclick="filterSelection('status')"> Bài đăng</button>
         </div>
     </div>
 
     <div class="content" id="users" style="padding: 20px;">
-        <?php if ($users != null) {
+        <?php 
             echo $users;
-        } ?>
+         ?>
     </div>
 
     <div class="content" id="status" style="padding: 20px;">
-        <?php if ($posts != null) {
+        <?php 
             echo $posts;
-        } ?>
+        ?>
     </div>
 </div>
 

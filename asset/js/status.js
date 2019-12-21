@@ -1,3 +1,43 @@
+function BeautifullyTimeStatus(current, previous) {
+
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+
+    // seconds different
+    var elapsed = current - previous;
+
+    if (elapsed < msPerMinute) {
+    	if (Math.round(elapsed/1000) > 0) {
+	         return Math.round(elapsed/1000) + ' giây trước';   
+    	} else {
+    		return 'Vừa xong';
+    	}
+    }
+
+    else if (elapsed < msPerHour) {
+         return Math.round(elapsed/msPerMinute) + ' phút trước';   
+    }
+
+    else if (elapsed < msPerDay ) {
+         return Math.round(elapsed/msPerHour ) + ' giờ trước';   
+    }
+
+    else if (elapsed < msPerMonth) {
+        return Math.round(elapsed/msPerDay) + ' ngày trước';   
+    }
+
+    else if (elapsed < msPerYear) {
+        return Math.round(elapsed/msPerMonth) + ' tháng trước';   
+    }
+
+    else {
+        return Math.round(elapsed/msPerYear ) + ' năm trước';   
+    }
+}
+
 $(document).ready(() => {
 
 	// Parse time on status
@@ -227,44 +267,4 @@ function UnLikeStatus(id) {
 			console.log(err);
 		}
 	})
-}
-
-function BeautifullyTimeStatus(current, previous) {
-
-    var msPerMinute = 60 * 1000;
-    var msPerHour = msPerMinute * 60;
-    var msPerDay = msPerHour * 24;
-    var msPerMonth = msPerDay * 30;
-    var msPerYear = msPerDay * 365;
-
-    // seconds different
-    var elapsed = current - previous;
-
-    if (elapsed < msPerMinute) {
-    	if (Math.round(elapsed/1000) > 0) {
-	         return Math.round(elapsed/1000) + ' giây trước';   
-    	} else {
-    		return 'Vừa xong';
-    	}
-    }
-
-    else if (elapsed < msPerHour) {
-         return Math.round(elapsed/msPerMinute) + ' phút trước';   
-    }
-
-    else if (elapsed < msPerDay ) {
-         return Math.round(elapsed/msPerHour ) + ' giờ trước';   
-    }
-
-    else if (elapsed < msPerMonth) {
-        return Math.round(elapsed/msPerDay) + ' ngày trước';   
-    }
-
-    else if (elapsed < msPerYear) {
-        return Math.round(elapsed/msPerMonth) + ' tháng trước';   
-    }
-
-    else {
-        return Math.round(elapsed/msPerYear ) + ' năm trước';   
-    }
 }
