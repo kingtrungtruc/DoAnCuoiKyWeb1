@@ -52,6 +52,10 @@ a, a:hover, a:visited, a:active, a:link{
     background-color: yellowgreen;
 }
 
+.item-mess-hover:hover{
+    background-color: coral;
+}
+
 /*right menu*/
 .fix-right-menu{
     right: 0;

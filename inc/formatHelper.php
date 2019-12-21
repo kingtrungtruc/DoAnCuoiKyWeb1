@@ -202,6 +202,10 @@ FIXMENU;
             $countAllUser ++;
         }
 
+        $checkfollows = "";
+        if($countFollows > 0){
+            $checkfollows = "color: red";
+        }
         $this->leftMenu =<<<LEFTMENU
         <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
             <div class="row">
@@ -222,7 +226,7 @@ FIXMENU;
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">$countFollowing</span></li>
                             </a>
                             <a href="follows.php">
-                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-user"></span> Lời mời kết bạn <span class="badge">$countFollows</span></li>
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-user"></span> Lời mời kết bạn <span class="badge" style="$checkfollows">$countFollows</span></li>
                             </a>
                             <a href="all_user.php">
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-search"></span> Có thể bạn biết <span class="badge">$countAllUser</span></li>
