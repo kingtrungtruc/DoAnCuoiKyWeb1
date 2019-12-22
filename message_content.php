@@ -11,8 +11,6 @@ $message = new MessageController();
 if (!isset($_COOKIE['login'])) {
     header('Location: index.php');
 }
-$current_user = $user->GetUser($_COOKIE['login']);
-$current_user_id = $current_user['user_id'];
 
 $users = $user->ListFriends($_COOKIE['login'], 'user_followed');
 foreach($users as $usr){
@@ -22,11 +20,7 @@ foreach($users as $usr){
 if(isset($_POST['user_friend_id'])){
     $id_user_from = $_POST['user_friend_id'];
 }
-if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
-    $tin_nhan = $_POST['tin_nhan'];       
-    
-    $message->AddMessage($current_user_id, $id_user_from, $tin_nhan);   
-}
+
 ?>
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
@@ -43,13 +37,12 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                         $id = $usr['user_id'];
                 ?>
                 <li class="list-group-item item-mess-hover">
-                    <form action="" method="POST">
+                    <form action="" method="POST" href="message_content.php?id=$id">
                         <div class="new-title">
                             <input name="user_friend_id" value="<?= $id?>" hidden/>
                             <img src="<?= $src ?>" alt="<?= $name ?>" title="<?= $name ?>"> 
                             <h4 id="user"><?= $name ?></h4>
                         </div>
-                    </form>
                     </a>
                 </li>
                 <?php } ?>
@@ -60,16 +53,19 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
         <div>
             <div class="wrap">
                 <div  class="mess">
-                    <?php                        
+                    <?php
+                        $current_user = $user->GetUser($_COOKIE['login']);
+                        $current_user_id = $current_user['user_id'];
+                        
                         $mang_mess = $message->GetAllMessage($current_user_id, $id_user_from);
                         foreach($mang_mess as $mess){
-                            if($mess['message_user_id'] == $current_user_id){
+                            if($mess['message_user_id'] == 2){
                     ?>
-                            <div class="may1" title=<?= $mess['message_created']?>><?= $mess['message_content'] ?></div><br/>
+                            <div class="may1"><?= $mess['message_content'] ?></div>
                     <?php
-                            } elseif($mess['message_user_id'] == $id_user_from){
+                            } elseif($mess['message_user_id'] == 1){
                     ?>
-                            <div class="may2" title=<?= $mess['message_created']?>><?= $mess['message_content'] ?></div><br/>
+                            <div class="may2"><?= $mess['message_content'] ?></div>
                     <?php                    
                             }
                         }
@@ -81,6 +77,7 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                 <table border="3" cellpadding="10" style="border-collapse: collapse; margin: 0px auto; width: 395px">
                     <tr>
                         <td>
+                            <input type="text" name="may" value="2" hidden/>
                             <input type="text" name="tin_nhan" id="tin_nhan" style="width: 100%" autofocus/> 
                         </td>
 
@@ -88,7 +85,6 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                             <input type="submit" value="Send"/>
                         </td>
                     </tr>
-                </table>
             </form>
         </div>
     </div>

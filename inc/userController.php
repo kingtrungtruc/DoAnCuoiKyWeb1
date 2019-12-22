@@ -692,7 +692,7 @@ class UserController
             $idB = $B['user_id'];
 
             if (!in_array($idA, $followingB) || !in_array($idB, $followsA)) {
-                return "Không thể từ chối yêu cầu";
+                return "Không thể hủy theo dõi";
             }
 
             // remove id from follow list

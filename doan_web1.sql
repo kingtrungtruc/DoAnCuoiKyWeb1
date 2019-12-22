@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th12 11, 2019 lúc 06:52 AM
+-- Thời gian đã tạo: Th12 22, 2019 lúc 08:48 AM
 -- Phiên bản máy phục vụ: 5.7.26
 -- Phiên bản PHP: 7.2.18
 
@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`comment_id`),
   KEY `fk_comments_users` (`comment_user_id`),
   KEY `fk_comments_status` (`comment_status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -53,7 +54,23 @@ CREATE TABLE IF NOT EXISTS `forgot_password` (
   `forgot_password_token` varchar(50) DEFAULT NULL,
   `forgot_password_experied` datetime DEFAULT NULL,
   PRIMARY KEY (`forgot_password_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `message`
+--
+
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE IF NOT EXISTS `message` (
+  `message_id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_user_id` int(11) NOT NULL,
+  `message_from_user_id` int(11) NOT NULL,
+  `message_content` varchar(255) NOT NULL,
+  `message_created` datetime NOT NULL,
+  PRIMARY KEY (`message_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -69,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `register` (
   `register_token` varchar(200) NOT NULL,
   `register_displayname` varchar(50) NOT NULL,
   PRIMARY KEY (`register_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -88,7 +105,8 @@ CREATE TABLE IF NOT EXISTS `status` (
   `status_wholiked` text,
   PRIMARY KEY (`status_id`),
   KEY `fk_status_users` (`status_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -110,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_created` datetime DEFAULT NULL,
   `user_lastlogin` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

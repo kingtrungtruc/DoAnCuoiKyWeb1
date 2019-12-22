@@ -81,6 +81,7 @@ HEADER;
     
     <link rel="stylesheet" type="text/css" href="asset/style.css">
     <link rel="stylesheet" type="text/css" href="asset/my_style_fix.css">
+    <link rel="stylesheet" type="text/css" href="asset/message.css">
     <link rel="stylesheet" type="text/css" href="asset/search/search.css">
     <link rel="stylesheet" type="text/css" href="plugins/bootstrap/css/bootstrap.css">
     
@@ -113,6 +114,37 @@ HEADER;
 <script src="asset/js/status.js" defer></script>
 <script src="asset/js/linkpreview.js" defer></script>
 <script src="asset/search/search.js" defer></script>
+</body>
+</html>
+FOOTER;
+        return $this->footer;
+    }
+
+    /**
+     * Footer
+     * @return [type] [description]
+     */
+    public function closeFooterMessage()
+    {
+        $this->footer =<<<FOOTER
+</div>
+<script src="asset/js/hamburgerMenu.js" defer></script>
+<script src="asset/js/dashboard.js" defer></script>
+<script src="asset/js/status.js" defer></script>
+<script src="asset/js/linkpreview.js" defer></script>
+<script src="asset/search/search.js" defer></script>
+<script>
+    $(function(){
+        //load lại khung khi có tin nhắn mới
+        setInterval(function(){
+            $(".wrap").load("message.php .mess", function(){
+                $(".mess").scrollTop($(".mess")[0].scrollHeight);
+            })                    
+        }, 3000);
+
+        $(".mess").scrollTop($(".mess")[0].scrollHeight);
+    })           
+</script>
 </body>
 </html>
 FOOTER;
