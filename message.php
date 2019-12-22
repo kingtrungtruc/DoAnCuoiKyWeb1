@@ -13,7 +13,7 @@ if (!isset($_COOKIE['login'])) {
 }
 $current_user = $user->GetUser($_COOKIE['login']);
 $current_user_id = $current_user['user_id'];
-
+$id_user_from = -1;
 $users = $user->ListFriends($_COOKIE['login'], 'user_followed');
 foreach($users as $usr){
     $id_user_from = $usr['user_id'];
@@ -33,7 +33,7 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
 <?= $formatHelper->addFixMenu() ?>
 <?= $formatHelper->addLeftMenu($_COOKIE['login'],'turquoise') ?>
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
         <div style="border-right: solid">
             <ul class="list-group list-group-flush" style="padding-right: 10px">
                 <?php foreach ($users as $usr) {
@@ -56,7 +56,7 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
             </ul>
         </div>
     </div>
-    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+    <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
         <div>
             <div class="wrap">
                 <div  class="mess">

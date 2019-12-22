@@ -25,13 +25,13 @@ a, a:hover, a:visited, a:active, a:link{
     margin-top: 60px;
     margin-left: 20px;
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (min-width: 991px) {
 	.body-website{
         margin-top: 161px;
         margin-left: 20px;
     }
 }
-@media only screen and (max-width: 767px) {
+@media only screen and (min-width: 767px) {
 	.body-website{
         margin-top: 220px;
         margin-left: 20px;
@@ -47,6 +47,17 @@ a, a:hover, a:visited, a:active, a:link{
     width: 16.67%;
     padding-left: 10px;
     padding-right: 10px;
+}
+@media only screen and (min-width: 767px) {
+	.fix-left-menu{
+        position: fixed;
+        left: 0;
+        display: block;
+        z-index: 999;
+        width: 25%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }
 .menu-hover:hover{
     background-color: yellowgreen;

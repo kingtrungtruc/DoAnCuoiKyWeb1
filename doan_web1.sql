@@ -1,34 +1,4 @@
-﻿-- phpMyAdmin SQL Dump
--- version 4.8.5
--- https://www.phpmyadmin.net/
---
--- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th12 22, 2019 lúc 08:48 AM
--- Phiên bản máy phục vụ: 5.7.26
--- Phiên bản PHP: 7.2.18
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Cơ sở dữ liệu: `doan_web1`
---
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `comments`
---
-
-DROP TABLE IF EXISTS `comments`;
+﻿DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
   `comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `comment_status_id` int(11) DEFAULT NULL,
@@ -41,12 +11,6 @@ CREATE TABLE IF NOT EXISTS `comments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `forgot_password`
---
-
 DROP TABLE IF EXISTS `forgot_password`;
 CREATE TABLE IF NOT EXISTS `forgot_password` (
   `forgot_password_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -55,12 +19,6 @@ CREATE TABLE IF NOT EXISTS `forgot_password` (
   `forgot_password_experied` datetime DEFAULT NULL,
   PRIMARY KEY (`forgot_password_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `message`
---
 
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE IF NOT EXISTS `message` (
@@ -72,12 +30,6 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`message_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `register`
---
-
 DROP TABLE IF EXISTS `register`;
 CREATE TABLE IF NOT EXISTS `register` (
   `register_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -87,12 +39,6 @@ CREATE TABLE IF NOT EXISTS `register` (
   `register_displayname` varchar(50) NOT NULL,
   PRIMARY KEY (`register_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `status`
---
 
 DROP TABLE IF EXISTS `status`;
 CREATE TABLE IF NOT EXISTS `status` (
@@ -106,13 +52,6 @@ CREATE TABLE IF NOT EXISTS `status` (
   PRIMARY KEY (`status_id`),
   KEY `fk_status_users` (`status_user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
--- Cấu trúc bảng cho bảng `users`
---
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
@@ -130,13 +69,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
---
--- Các ràng buộc cho các bảng đã đổ
---
-
---
--- Các ràng buộc cho bảng `comments`
---
 ALTER TABLE `comments`
   ADD CONSTRAINT `fk_comments_status` FOREIGN KEY (`comment_status_id`) REFERENCES `status` (`status_id`),
   ADD CONSTRAINT `fk_comments_users` FOREIGN KEY (`comment_user_id`) REFERENCES `users` (`user_id`);
@@ -147,7 +79,3 @@ ALTER TABLE `comments`
 ALTER TABLE `status`
   ADD CONSTRAINT `fk_status_users` FOREIGN KEY (`status_user_id`) REFERENCES `users` (`user_id`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
