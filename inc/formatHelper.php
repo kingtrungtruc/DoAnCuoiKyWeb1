@@ -184,6 +184,7 @@ FIXMENU;
 
         $countFollowing = $user->CountListFriends($username, 'user_following');
         $countFollows = $user->CountListFriends($username, 'user_follows');
+        $countFollowed = $user->CountListFriends($username, 'user_followed');
 
         $countAllUser = 0;
         $users = $user->ListUsers();
@@ -220,7 +221,7 @@ FIXMENU;
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-wrench"></span> Đổi mật khẩu </li>
                             </a>   
                             <a href="message.php">
-                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">5</span></li>
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">$countFollowed</span></li>
                             </a>
                             <a href="following.php">
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">$countFollowing</span></li>
