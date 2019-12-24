@@ -273,7 +273,7 @@ class UserController
     public function UpdateProfile($username, $avatar, ...$args)
     {
         $this->request = $args[0];
-        $phone = $name = $img = "";
+        $phone = $name = $img = $birthday = "";
 
         // Update phone-number
         // 0123456789 || +84123456789
@@ -283,6 +283,23 @@ class UserController
                 return "Định dạng số điện thoại không chính xác";
             }
             $phone = $this->request['phone'];
+        }
+
+        if(!empty($this->request['birthday'])){
+            if(is_numeric($this->request['birthday']) == true){
+                if(is_int($this->request['birthday']) == false){
+                    return "Input vừa nhập không phải số nguyên";
+                }
+                return "Input vừa nhập không phải số";
+            }
+            $now = getdate();
+            if($this->request['birthday'] > $now['year']){
+                return "Năm sinh không phù hợp";
+            }
+            if($this->request['birthday'] < 0){
+                return "Vui lòng nhập số dương";
+            }
+            $birthday = $this->request['birthday'];
         }
 
         // Update real-name
@@ -311,15 +328,16 @@ class UserController
                 return "Không tồn tại tên đăng nhập";
             }
 
-            if (empty($phone)) $phone = $usr['user_phone'];
-            if (empty($name)) $name = $usr['user_displayname'];
-            if (empty($img)) $img = $usr['user_avatar'];
+            if(empty($phone)) $phone = $usr['user_phone'];
+            if(empty($name)) $name = $usr['user_displayname'];
+            if(empty($img)) $img = $usr['user_avatar'];
+            if(empty($birthday)) $birthday = $usr['user_birthday'];
 
 
             // prepare string update profile
-            $sqlUpdate = "UPDATE users SET user_displayname = ?, user_phone = ?, user_avatar = ? WHERE user_email = ?";
+            $sqlUpdate = "UPDATE users SET user_displayname = ?, user_phone = ?, user_avatar = ?, user_birthday = ? WHERE user_email = ?";
             $data = db::$connection->prepare($sqlUpdate);
-            if ($data->execute([$name, $phone, $img, $username])) {
+            if ($data->execute([$name, $phone, $img, $username, $birthday])) {
                 return "Cập nhật thành công";
             }
             return "Cập nhật thất bại, có lỗi xảy ra";
@@ -342,6 +360,10 @@ class UserController
             $this->request['image'] = $attach['image'];
         }
 
+        if($attach['image']['error'] == 1){
+            return "Không thể tải ảnh lớn hơn 2Mb";
+        }
+
 
         // valid content status
         if (!isset($this->request['image']) && empty($this->request['content'])) {
@@ -356,10 +378,7 @@ class UserController
             }
 
             $status = new StatusController();
-            $id = $status->NewStatus(
-                $usr['user_id'], 
-                $this->request
-            );
+            $id = $status->NewStatus($usr['user_id'], $this->request);
 
             return $id ? $id : "Đăng status thất bại, có lỗi xảy ra";
         } catch (PDOException $ex) {

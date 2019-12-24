@@ -10,10 +10,11 @@ $comment = new CommentController();
 if (!isset($_COOKIE['login'])) {
     header('Location: index.php');
 }
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (isset($_POST['addStatus'])) {
-        $user->NewStatus($_COOKIE['login'], $_FILES, $_POST);
+        $message = $user->NewStatus($_COOKIE['login'], $_FILES, $_POST);
         header('Location: '.$_SERVER['PHP_SELF']);
     }
 }
@@ -23,12 +24,11 @@ $postEntities = $user->SearchPosts($_COOKIE['login'], "");
 ?>
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
-    <?= $formatHelper->addFixMenu() ?>
-    <?= $formatHelper->addLeftMenu($_COOKIE['login'],'lightgreen') ?>
- 
-    <?= $formatHelper->addStatus() ?>
-    <?= $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']); ?>
+<?= $formatHelper->addFixMenu() ?>
+<?= $formatHelper->addLeftMenu($_COOKIE['login'],'lightgreen') ?>
+<?= $formatHelper->addStatus() ?>
+<?= $formatHelper->addNewsfeed($postEntities, $_COOKIE['login']); ?>
         
-    <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
+<?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
     
 <?= $formatHelper->closeFooter() ?>

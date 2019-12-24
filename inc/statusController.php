@@ -39,20 +39,14 @@ class StatusController
             $target_path_db = "inc/upload/". $id_user . $token . $ext;
             move_uploaded_file($this->request["image"]["tmp_name"], $target_path_local);
         } else {
-            $target_path_db = "";
+            $target_path_db = '';
         }
 
         try {
             // prepare string insert status
             $sqlInsert = "INSERT INTO status(status_user_id, status_content, status_role, status_image, status_created) VALUES(?, ?, ?, ?, now())";
             $data = db::$connection->prepare($sqlInsert);
-            if ($data->execute(
-                [
-                    $id_user, 
-                    $content, 
-                    $this->request['role'],
-                    $target_path_db
-                ])) {
+            if ($data->execute([$id_user, $content, $this->request['role'], $target_path_db])){
                 return db::$connection->lastInsertId();
             }
             return 0;

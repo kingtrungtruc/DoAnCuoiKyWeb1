@@ -307,8 +307,7 @@ RIGHTMENU;
 
                     <div class="status-extra-content">
                         <hr>
-                        <input type="file" name="image" class="form-control" id="status-image">
-                        
+                        <input type="file" name="image" class="form-control" id="status-image">                       
 
                         <select class="form-control" id="sel1" name = "role">
                             <option>Công khai</option>

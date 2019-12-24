@@ -34,6 +34,10 @@ if (!isset($_COOKIE['login'])) {
         <input type="text" name="realname" class="form-control">
     </div>
     <div class="form-group">
+        <label for="birthday">Năm sinh: </label>
+        <input type="text" name="birthday" class="form-control">
+    </div>
+    <div class="form-group">
         <label for="avatar">Ảnh đại diện: </label>
         <input type="file" name="avatar" class="form-control">
     </div>
