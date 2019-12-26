@@ -211,6 +211,7 @@ FIXMENU;
     public function addLeftMenu($username,$bg_color)
     {
         $user = new UserController();
+        $message = new MessageController();
         $usr = $user->GetUser($username);
         $id = $usr['user_id'];
         $name = $usr['user_displayname'];
@@ -240,6 +241,12 @@ FIXMENU;
         if($countFollows > 0){
             $checkfollows = "color: red";
         }
+
+        $checkmessage = "";
+        $countmessagenoseen = $message->CountAllMessageFalse($id);
+        if($countmessagenoseen > 0){
+            $checkmessage = "color: red";
+        }
         $this->leftMenu =<<<LEFTMENU
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="row">
@@ -254,7 +261,7 @@ FIXMENU;
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-wrench"></span> Đổi mật khẩu </li>
                             </a>   
                             <a href="message.php">
-                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge">$countFollowed</span></li>
+                                <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-envelope"></span> Tin nhắn <span class="badge" style="$checkmessage">$countFollowed</span></li>
                             </a>
                             <a href="following.php">
                                 <li class="list-group-item menu-hover"><span class="glyphicon glyphicon-eye-open"></span> Đang theo dõi <span class="badge">$countFollowing</span></li>

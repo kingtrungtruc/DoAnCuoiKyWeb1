@@ -34,6 +34,23 @@ class MessageController{
         }
     }
 
+    public function CountAllMessageFalse($user_id){
+        try{
+            $count = 0;
+            $sqlSelect = "SELECT count(*) as slmess FROM message WHERE message_from_user_id = ? and message_seen = ?";
+            $data = db::$connection->prepare($sqlSelect);
+            if($data->execute([$user_id, 0])){
+                $rows = $data->fetch(PDO::FETCH_ASSOC);                
+                $count = $rows['slmess'];
+            }
+            
+            return $count;
+        }
+        catch(PDOException $ex){
+            throw new PDOException($ex->getMessage());
+        }
+    }
+
     public function GetIdMessageFalse($user_id, $user_id_from){
         try{
             $row_id = null;
