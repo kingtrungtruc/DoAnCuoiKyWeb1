@@ -65,6 +65,12 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
         $message->AddMessage($current_user_id, $id_user_from, $tin_nhan);
     }       
 }
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    if(isset($_POST['deleteMessage'])){
+        $message_nof = $message->DeleteMessage($_POST['message_id']);
+        header('Location: '.$_SERVER['PHP_SELF']);
+    }
+}
 ?>
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
@@ -87,7 +93,7 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                             <img src="<?= $src ?>" alt="<?= $name ?>" title="<?= $name ?>"> 
                             <h4 id="user"><?= $name ?></h4>
                         </div>
-                        <button type="submit">Nhắn tin</button>
+                        <button type="submit" class="btn btn-default">Nhắn tin</button>
                     </form>
                 </li>
                 <?php } ?>
@@ -103,11 +109,18 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                         foreach($mang_mess as $mess){
                             if($mess['message_user_id'] == $current_user_id){
                     ?>
-                            <div class="may1" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?></div><br/>
+                            <form action="" method="POST">
+                                <input name="message_id" value="<?= $mess['message_id']?>" hidden> 
+                                <div class="may1" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?><br/><button type="submit" name="deleteMessage" style="border: 1px solid #d43f3a; background-color: #d9534f; font-size: 10px; float: right">Xóa</button></div>
+                                
+                                <br/>
+                            </form>
                     <?php
                             } elseif($mess['message_user_id'] == $id_user_from){
                     ?>
-                            <div class="may2" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?></div><br/>
+                                <input name="message_id" value="$mess['message_id']" hidden> 
+                                <div class="may2" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?></div>                                
+                                <br/>
                     <?php                    
                             }
                         }

@@ -141,4 +141,18 @@ class MessageController{
             throw new PDOException($ex->getMessage());
         }
     }
+
+    public function DeleteMessage($message_id){
+        try{
+            $sqlDelete = "DELETE FROM message WHERE message_id = ?";
+            $data = db::$connection->prepare($sqlDelete);
+            if($data->execute([$message_id])){
+                return "Xóa thành công!";
+            }
+            return "Có lỗi xảy ra";
+        }
+        catch(PDOException $ex){
+            throw new PDOException($ex->getMessage());
+        }
+    }
 }
