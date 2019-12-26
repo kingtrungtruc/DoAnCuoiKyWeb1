@@ -1,30 +1,33 @@
 <!-- GUEST -->
 <?php
-require_once 'inc/autoload.php';
+    require_once 'inc/autoload.php';
 
-// Format Helper
-$formatHelper = new FormatHelper();
+    // Format Helper
+    $formatHelper = new FormatHelper();
 
-// DIRECTION
-if (!isset($_COOKIE['login'])) {
-    header('Location: index.php');
-}
-$style = 'danger';
-//$_SERVER['REQUEST_METHOD' => Xác định request gửi đến server con đường nào (post,get,patch,delete)
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $user = new UserController();
-    $message = "";//Thông báo KQ từ server trả về
-
-    if (isset($_POST['addFriend'])) {
-        $message = $user->AddFriend($_COOKIE['login'], $_POST['name']);
-        $style = 'info';
-    }else if (isset($_POST['unFollowing'])){
-        $message = $user->unFollowing($_COOKIE['login'], $_POST['name']);
-        $style = 'info';
+    // DIRECTION
+    if (!isset($_COOKIE['login'])) {
+        header('Location: index.php');
     }
+    $style = 'danger';
+    //$_SERVER['REQUEST_METHOD' => Xác định request gửi đến server con đường nào (post,get,patch,delete)
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $user = new UserController();
+        $message = "";//Thông báo KQ từ server trả về
 
-    $display = "class='alert alert-$style' style='display: block; text-align: center;'";
-}
+        if (isset($_POST['addFriend'])) {
+            $message = $user->AddFriend($_COOKIE['login'], $_POST['name']);
+            $style = 'info';
+        }else if (isset($_POST['unFollowing'])){
+            $message = $user->unFollowing($_COOKIE['login'], $_POST['name']);
+            $style = 'info';
+        }else if (isset($_POST['unFriend'])) {
+            $message = $user->DeleteFriend($_COOKIE['login'], $_POST['name']);
+            $style = 'info';
+        } 
+
+        $display = "class='alert alert-$style' style='display: block; text-align: center;'";
+    }
 ?>
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>

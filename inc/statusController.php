@@ -55,6 +55,37 @@ class StatusController
         }
     }
 
+    public function ChangeStatus($status_id, $status_content, $status_role){
+        if($this->GetStatusById($status_id) == null){
+            return null;
+        }
+        try {
+            // prepare string insert status
+            $sqlUpdate = "UPDATE status SET status_content = ?, status_role = ? WHERE status_id = ?";
+            $data = db::$connection->prepare($sqlUpdate);
+            if ($data->execute([$status_content, $status_role, $status_id])){
+                return $status_id;
+            }
+            return null;
+        } catch (PDOException $ex) {
+            throw new PDOexception($ex->getMessage());
+        }
+    }
+
+    public function GetStatusById($status_id){
+        try {
+            $sqlSelect = "SELECT * FROM status WHERE status_id = ?";
+            $data = db::$connection->prepare($sqlSelect);
+            if ($data->execute([$status_id])) {
+                $row = $data->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            }
+            return null;
+        } catch (PDOException $ex) {
+            throw new PDOException($ex->getMessage());
+        }
+    }
+
     public function StatusById($id_user, $limit = 10)
     {
         try {

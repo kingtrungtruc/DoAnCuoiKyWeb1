@@ -17,6 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $message = $user->NewStatus($_COOKIE['login'], $_FILES, $_POST);
         header('Location: '.$_SERVER['PHP_SELF']);
     }
+    if (isset($_POST['changeStatus'])){
+        $messagechange = $user->ChangeStatus($_COOKIE['login'], $_POST);
+        header('Location: '.$_SERVER['PHP_SELF']);
+    }
 }
 
 // $newsfeed = $user->LoadNewsfeed($_COOKIE['login']);

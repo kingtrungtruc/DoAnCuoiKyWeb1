@@ -1,70 +1,84 @@
 <?php
-require_once 'inc/autoload.php';
-//Trang
-// Format Helper
-$formatHelper = new FormatHelper();
-$user = new UserController();
-$status = new StatusController();
-
-if (!isset($_COOKIE['login'])) {
-    header('Location: index.php');
-}
-$style = 'danger';
-$message = "";//Thông báo KQ từ server trả về
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    require_once 'inc/autoload.php';
+    //Trang
+    // Format Helper
+    $formatHelper = new FormatHelper();
     $user = new UserController();
-    
-    if (isset($_POST['unFriend'])) {
-        $message = $user->DeleteFriend($_COOKIE['login'], $_POST['name']);
-        $style = 'info';
-    } 
-    $display = "class='alert alert-$style' style='display: block; text-align: center;'";
-}
+    $status = new StatusController();
 
-$id_user2 = $_GET['id'];
-$user2 = $user->GetUser('',$id_user2);
-$user1 =$user->GetUser($_COOKIE['login']);
-$id_user1 = $user1['user_id'];
+    if (!isset($_COOKIE['login'])) {
+        header('Location: index.php');
+    }
 
-//Xác định mối quan hệ gì
-$noRelationship = false;
-$following= false;
-$follows= false;
-$followed= false;
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-$followedA = !empty($user1['user_followed']) ? unserialize($user1['user_followed']) : [];
-$followedB = !empty($user2['user_followed']) ? unserialize($user2['user_followed']) : [];
+        if (isset($_POST['addStatus'])) {
+            $message = $user->NewStatus($_COOKIE['login'], $_FILES, $_POST);
+            header('Location: '.$_SERVER['PHP_SELF']);
+        }
+        if (isset($_POST['changeStatus'])){
+            $messagechange = $user->ChangeStatus($_COOKIE['login'], $_POST);
+            header('Location: '.$_SERVER['PHP_SELF']);
+        }
+    }
 
-$followingA = !empty($user1['user_following']) ? unserialize($user1['user_following']) : [];
-$followsA = !empty($user1['user_follows']) ? unserialize($user1['user_follows']) : [];
+    $style = 'danger';
+    $message = "";//Thông báo KQ từ server trả về
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        $user = new UserController();
+        
+        if (isset($_POST['unFriend'])) {
+            $message = $user->DeleteFriend($_COOKIE['login'], $_POST['name']);
+            $style = 'info';
+        } 
+        $display = "class='alert alert-$style' style='display: block; text-align: center;'";
+    }
+    //Xác định mối quan hệ gì
+    $noRelationship = false;
+    $following= false;
+    $follows= false;
+    $followed= false;
+    $user1 =$user->GetUser($_COOKIE['login']);
+    $id_user1 = $user1['user_id'];
+    $id_user2 = $user1['user_id'];
+    $user2 = $user->GetUser('',$id_user2);
+    if(isset($_GET['id'])){
+        $id_user2 = $_GET['id'];
+        $user2 = $user->GetUser('',$id_user2);
+        $followedA = !empty($user1['user_followed']) ? unserialize($user1['user_followed']) : [];
+        $followedB = !empty($user2['user_followed']) ? unserialize($user2['user_followed']) : [];
 
-$followsB = !empty($user2['user_follows']) ? unserialize($user2['user_follows']) : [];
-$followingB = !empty($user2['user_following']) ? unserialize($user2['user_following']) : [];
+        $followingA = !empty($user1['user_following']) ? unserialize($user1['user_following']) : [];
+        $followsA = !empty($user1['user_follows']) ? unserialize($user1['user_follows']) : [];
 
-//nếu là chính mình
-if($id_user1==$id_user2)
-{
+        $followsB = !empty($user2['user_follows']) ? unserialize($user2['user_follows']) : [];
+        $followingB = !empty($user2['user_following']) ? unserialize($user2['user_following']) : [];
+    }
 
-}
-//Nếu là bạn bè
-else if (in_array($id_user1, $followedB) && in_array($id_user2, $followedA)) {
-    $followed=true;
-}
-//Nếu A đang theo dõi B
-else if (in_array($id_user2, $followingA) || in_array($id_user1, $followsB)) {
-    $following = true;
-}
-//Nếu B đang theo dõi A
-else if(in_array($id_user1, $followingB) || in_array($id_user2, $followsA))
-{
-    $follows=true;
-}
-else{
-    $noRelationship=true;
-}
+    //nếu là chính mình
+    if($id_user1==$id_user2)
+    {
+        $user2 = $user1;
+    }
+    //Nếu là bạn bè
+    else if (in_array($id_user1, $followedB) && in_array($id_user2, $followedA)) {
+        $followed=true;
+    }
+    //Nếu A đang theo dõi B
+    else if (in_array($id_user2, $followingA) || in_array($id_user1, $followsB)) {
+        $following = true;
+    }
+    //Nếu B đang theo dõi A
+    else if(in_array($id_user1, $followingB) || in_array($id_user2, $followsA))
+    {
+        $follows=true;
+    }
+    else{
+        $noRelationship=true;
+    }
 
-$user2_avatar = !empty($user2['user_avatar']) ? 'data:image;base64,'.$user2['user_avatar'] : "asset/img/non-avatar.png";
-$statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2);
+    $user2_avatar = !empty($user2['user_avatar']) ? 'data:image;base64,'.$user2['user_avatar'] : "asset/img/non-avatar.png";
+    $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2);
 ?>
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>
 <?= $formatHelper->addFixMenu() ?>
@@ -76,6 +90,15 @@ $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2
     <div class="info-title">
         <span><img src="<?= $user2_avatar?>"/></span>
         <span id="name"><?=$user2['user_displayname']?></span>
+        <?php if($user2['user_phone'] == null){?>
+            <div>Số điện thoại: Chưa cập nhật</div>
+        <?php }else{?>
+            <div>Số điện thoại: <?= $user2['user_phone']?></div>
+        <?php } ?>
+        <div>Năm sinh: <?= $user2['user_birthday']?></div>
+        <?php if($id_user1 != $id_user2){?>
+            <div>Đăng nhập lần cuối: <?php echo date('H:i:s - d/m/Y', strtotime($user2['user_lastlogin']));?></div>
+        <?php }?>
     </div>
     <div class="info-body">
         <?php
@@ -114,6 +137,7 @@ $statusOfUserB = $status->ShowStatusWithRelationship($user1['user_id'],$id_user2
         </form>
     </div>
 </div> 
+
 <?php if($id_user1 == $id_user2): { ?>
 <?= $formatHelper->addStatus() ?>
 <?php }endif; ?>

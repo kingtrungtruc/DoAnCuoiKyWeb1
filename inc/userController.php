@@ -146,7 +146,7 @@ class UserController
         }
 
         if (strlen($this->request['password']) < 6) {
-            return "Mật khẩu độ dài tối thiểu 6 ký tự";
+            return "Mật khẩu phải có tối thiểu 6 ký tự";
         }
 
         if (empty($this->request['username']) || empty($this->request['password']) || empty($this->request['re-password'])) {
@@ -288,9 +288,9 @@ class UserController
         if(!empty($this->request['birthday'])){
             if(is_numeric($this->request['birthday']) == true){
                 if(is_int($this->request['birthday']) == false){
-                    return "Input vừa nhập không phải số nguyên";
+                    return "Năm sinh không đúng";
                 }
-                return "Input vừa nhập không phải số";
+                return "Năm sinh vừa nhập không phải số";
             }
             $now = getdate();
             if($this->request['birthday'] > $now['year']){
@@ -361,7 +361,7 @@ class UserController
         }
 
         if($attach['image']['error'] == 1){
-            return "Không thể tải ảnh lớn hơn 2Mb";
+            return "Đã xảy ra lỗi khi tải ảnh hoặc ảnh lớn hơn 2Mb";
         }
 
 
@@ -381,6 +381,28 @@ class UserController
             $id = $status->NewStatus($usr['user_id'], $this->request);
 
             return $id ? $id : "Đăng status thất bại, có lỗi xảy ra";
+        } catch (PDOException $ex) {
+            throw new PDOException($ex->getMessage());
+        }
+    }
+
+    public function ChangeStatus($username, ...$args){
+        $this->request = $args[0];
+        $status = new StatusController();
+
+        $content_change = htmlspecialchars($this->request['new_content']);
+        if($content_change == ''){
+            $statusbyid = $status->GetStatusById($this->request['status_id_change']);
+            $content_change = $statusbyid['status_content'];
+        }
+
+        try{
+            $usr = $this->GetUser($username);
+            if ($usr['user_email'] != $username) {
+                return "Không tồn tại tên đăng nhập";
+            }
+            $id = $status->ChangeStatus($this->request['status_id_change'], $content_change, $this->request['new_role']);
+            return $id ? $id : "Cập nhật thất bại, có lổi xảy ra";
         } catch (PDOException $ex) {
             throw new PDOException($ex->getMessage());
         }

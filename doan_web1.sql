@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th12 24, 2019 lúc 05:45 AM
+-- Thời gian đã tạo: Th12 26, 2019 lúc 05:48 PM
 -- Phiên bản máy phục vụ: 5.7.26
 -- Phiên bản PHP: 7.2.18
 
@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `message_user_id` int(11) NOT NULL,
   `message_from_user_id` int(11) NOT NULL,
   `message_content` varchar(255) NOT NULL,
+  `message_seen` tinyint(1) NOT NULL,
   `message_created` datetime NOT NULL,
   PRIMARY KEY (`message_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -90,8 +90,9 @@ HEADER;
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -143,7 +144,7 @@ FOOTER;
         }, 3000);
 
         $(".mess").scrollTop($(".mess")[0].scrollHeight);
-    })           
+    })         
 </script>
 </body>
 </html>
@@ -338,6 +339,7 @@ STATUS;
         $currentUser = $user->GetUser($username);
 
         $this->newsfeed = "";
+
         foreach ($contents as $content) {
 
             // real-name & avatar
@@ -401,7 +403,47 @@ STATUS;
                             </h4>                                
                             <span title='$content[status_created]'><i>$content[status_created]</i></span>
                         </div>
-                    </div>
+NEWSFEED;
+if($id_user == $currentUser['user_id']){
+    $this->newsfeed .=<<<NEWSFEED
+            <div class="new-title-role">
+                <!-- Trigger the modal with a button -->
+                <button id="btn-modal" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Sửa bài đăng</button>
+                                    
+                <!-- Modal -->
+                <form action="" method="POST">
+                <div class="modal fade" id="myModal" role="dialog">
+                    
+                        <div class="modal-dialog modal-my-style">                                
+                        <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Chỉnh sửa bài đăng</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input name="status_id_change" value='$content[status_id]' hidden> 
+                                    <textarea rows='6' placeholder='$content[status_content]' name="new_content"></textarea>                                            
+                                    <select class="form-control" id="sel1" name="new_role">
+                                        <option>Công khai</option>
+                                        <option>Bạn bè</option>
+                                        <option>Chỉ mình tôi</option>
+                                    </select>                                            
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success" name="changeStatus">Cập nhật</button>
+                                </div>
+                            </div>                                    
+                        </div>
+                    
+                </div> 
+                </form>               
+            </div>
+NEWSFEED;
+}
+
+            $this->newsfeed .=<<<NEWSFEED
+            </div>
                     <div class="card-body">
                         <div class="new-content">$content[status_content]</div>
                         $imageAttach
@@ -611,9 +653,9 @@ LISTUSERALL;
     {
         $this->friend = "";
         $user = new UserController();
-        $users = $user->ListFriends($username, 'user_followed');
+        $userfriends = $user->ListFriends($username, 'user_followed');
 
-        foreach ($users as $usr) {
+        foreach ($userfriends as $usr) {
             // real-name & avatar
             $name = !empty($usr['user_displayname']) ? $usr['user_displayname'] : $usr['user_email'];
             $src = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png";
@@ -672,13 +714,25 @@ LISTFRIEND;
      * Giao diện liệt kê tất cả người mà mình đang theo dõi
      * @param [type] $username [description]
      */
+    public function CheckId($id, $username){
+        $check = false;
+        $user = new UserController();
+        $userfriends = $user->ListFriends($username, 'user_followed');        
+        foreach($userfriends as $usrf){
+            if($usrf['user_id'] == $id){
+                $check = true;
+                break;
+            }
+        }
+        return $check;
+    }
     public function ListFollowing($username)
     {
         $this->friend = "";
         $user = new UserController();
-        $users = $user->ListFriends($username, 'user_following');
+        $userfollowing = $user->ListFriends($username, 'user_following');
 
-        foreach ($users as $usr) {
+        foreach ($userfollowing as $usr) {
             // real-name & avatar
             $name = !empty($usr['user_displayname']) ? $usr['user_displayname'] : $usr['user_email'];
             $src = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png";
@@ -690,7 +744,17 @@ LISTFRIEND;
         <img src=$src alt="avatar">
         <h2><a href="profile.php?id=$id">$name</a></h2>
         <input name="name" value=$usr[user_email] hidden>
-        <button class='btn btn-warning' name='unFollowing'>Bỏ theo dõi</button></form></li>
+LISTFRIEND;
+            if($this->CheckId($usr['user_id'], $username)){
+                $this->friend .=<<<LISTFRIEND
+                <button type="submit" class="btn btn-danger" name="unFriend">Hủy kết bạn</button>
+LISTFRIEND;
+            }else{
+                $this->friend .=<<<LISTFRIEND
+                <button class='btn btn-warning' name='unFollowing'>Bỏ theo dõi</button>
+LISTFRIEND;
+            } 
+            $this->friend .=<<<LISTFRIEND
     </form>
 </li>
 LISTFRIEND;

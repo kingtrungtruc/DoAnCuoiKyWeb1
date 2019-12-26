@@ -291,6 +291,39 @@ a, a:hover, a:visited, a:active, a:link{
 	border-radius: 50%;
 }
 
+/*sửa role*/
+.new-title-role {
+	position: absolute;
+    right: 5px;
+    top: 10px;
+    bottom: 0;
+}
+
+.new-title-role select {
+	font-size: 17px;
+}
+
+.modal-my-style textarea {
+	overflow: hidden;
+	padding: 10px 10px 0px;
+	width: 100%;
+	font-size: 16px;
+	border: 1px solid #eee/*rgba(0,0,0,0.4)*/;
+	border-radius: 10px;
+	min-height: 120px;
+	max-height: 120px;	
+    background-color: #eee;
+    color: #000;
+}
+
+.modal-my-style select {
+    text-align: center;
+	width: fit-content;
+    cursor: pointer;
+    margin: 6px 30px 0px 30px;
+    border-radius: 10px !important;
+}
+
 .card{
     position:relative;
     display:-ms-flexbox;

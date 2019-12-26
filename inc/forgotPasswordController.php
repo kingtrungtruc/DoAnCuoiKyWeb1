@@ -86,7 +86,7 @@ class ForgotPasswordController
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Lấy lại mật khẩu';
-            $mail->Body    = "Nhấn vào đường dẫn sau để lấy lại mật khẩu: <a href='http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token'>http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token</a>.\nCó hiệu lực trong 1 ngày, kể từ thời điểm nhận được email này.<br/><br/>Nếu không phải là bạn, vui lòng không thực hiện điều này và hãy đổi mật khẩu cho tài khoản của mình!";
+            $mail->Body    = "Nhấn vào đường dẫn sau để lấy lại mật khẩu: <a href='http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token'>http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?token=$token</a>.<br/>Có hiệu lực trong 1 ngày, kể từ thời điểm nhận được email này.<br/><br/>Nếu không phải là bạn, vui lòng không thực hiện điều này và hãy đổi mật khẩu cho tài khoản của mình!";
 
             $mail->send();
             return 'Gửi thành công, vui lòng kiểm tra email và làm theo hướng dẫn';
@@ -119,6 +119,9 @@ class ForgotPasswordController
 
     public function ChangePassword($token, $password)
     {
+        if(strlen($password) < 6){
+            return "Mật khẩu phải có tối thiểu 6 ký tự";
+        }
         $isNotExperied = $this->ValidateToken($token);
         if ($isNotExperied !== true) return $isNotExperied;
 

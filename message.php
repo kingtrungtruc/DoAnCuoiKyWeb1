@@ -19,13 +19,51 @@ foreach($users as $usr){
     $id_user_from = $usr['user_id'];
     break;
 }
-if(isset($_POST['user_friend_id'])){
-    $id_user_from = $_POST['user_friend_id'];
+if(isset($_COOKIE['message_friend_id'])){
+    if(isset($_POST['user_friend_id'])){
+        if($_POST['user_friend_id'] != $_COOKIE['message_friend_id']){
+            $id_user_from = $_POST['user_friend_id'];
+        }else{
+            $id_user_from = $_COOKIE['message_friend_id'];
+        }
+    }else{
+        foreach($users as $usr){
+            $id_user_from = $usr['user_id'];
+            break;
+        }
+        if($_COOKIE['message_friend_id'] != $id_user_from){
+            $id_user_from = $_COOKIE['message_friend_id'];
+        }
+    }
+    setcookie('message_friend_id', '', time() - 3600);
+    setcookie('message_friend_id', $id_user_from, time() + 4);
+}else{
+    foreach($users as $usr){
+        $id_user_from = $usr['user_id'];
+        break;
+    }
+    if(isset($_POST['user_friend_id'])){
+        if($_POST['user_friend_id'] != $id_user_from){
+            $id_user_from = $_POST['user_friend_id'];
+        }
+    }
+    setcookie('message_friend_id', '', time() - 3600);
+    setcookie('message_friend_id', $id_user_from, time() + 4);
 }
+if($id_user_from == -1){
+    foreach($users as $usr){
+        $id_user_from = $usr['user_id'];
+        break;
+    }
+    setcookie('message_friend_id', '', time() - 3600);
+    setcookie('message_friend_id', $id_user_from, time() + 4);
+}
+
 if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
-    $tin_nhan = $_POST['tin_nhan'];       
-    
-    $message->AddMessage($current_user_id, $id_user_from, $tin_nhan);   
+    $tin_nhan = $_POST['tin_nhan']; 
+    if($id_user_from != -1){
+        $message->AddMessage($current_user_id, $id_user_from, $tin_nhan);
+    }       
 }
 ?>
 
@@ -49,8 +87,8 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                             <img src="<?= $src ?>" alt="<?= $name ?>" title="<?= $name ?>"> 
                             <h4 id="user"><?= $name ?></h4>
                         </div>
+                        <button type="submit">Nhắn tin</button>
                     </form>
-                    </a>
                 </li>
                 <?php } ?>
             </ul>
@@ -65,11 +103,11 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                         foreach($mang_mess as $mess){
                             if($mess['message_user_id'] == $current_user_id){
                     ?>
-                            <div class="may1" title=<?= $mess['message_created']?>><?= $mess['message_content'] ?></div><br/>
+                            <div class="may1" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?></div><br/>
                     <?php
                             } elseif($mess['message_user_id'] == $id_user_from){
                     ?>
-                            <div class="may2" title=<?= $mess['message_created']?>><?= $mess['message_content'] ?></div><br/>
+                            <div class="may2" title="<?= date('H:i:s - d/m/Y', strtotime($mess['message_created']))?>"><?= $mess['message_content'] ?></div><br/>
                     <?php                    
                             }
                         }
@@ -81,7 +119,11 @@ if(isset($_POST['tin_nhan']) && !empty($_POST['tin_nhan'])){
                 <table border="3" cellpadding="10" style="border-collapse: collapse; margin: 0px auto; width: 395px">
                     <tr>
                         <td>
-                            <input type="text" name="tin_nhan" id="tin_nhan" style="width: 100%" autofocus/> 
+                        <?php
+                            $friend = $user->GetUser('', $id_user_from);
+                            $friendname = $friend['user_displayname'];
+                        ?>
+                            <input type="text" name="tin_nhan" id="tin_nhan" style="width: 100%"  placeholder="Gửi tin nhắn cho <?= $friendname?>" autofocus/> 
                         </td>
 
                         <td style="text-align: center">

@@ -49,11 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'])) {
     /*
      * Request new password
      * */
+    $message = '';
     $work = new ForgotPasswordController();
     $message = $work->ChangePassword($_GET['token'], $_POST['password']);
-
-    header('Location: login.php');
-    die();
+    if($message == "Mật khẩu phải có tối thiểu 6 ký tự"){
+        $contentHTML = $formatHelper->addNewPassword();
+        $display = "display: block; text-align: center;";
+    }else{
+        header('Location: login.php');
+        die();
+    }    
 }
 // DIRECTION
 if (isset($_COOKIE['login'])) {
