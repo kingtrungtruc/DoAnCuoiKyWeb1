@@ -110,6 +110,8 @@ HEADER;
     {
         $this->footer =<<<FOOTER
 </div>
+</div>
+</div>
 <script src="asset/js/hamburgerMenu.js" defer></script>
 <script src="asset/js/dashboard.js" defer></script>
 <script src="asset/js/status.js" defer></script>
@@ -330,6 +332,7 @@ RIGHTMENU;
                     </div>
                 </form>
             </div>
+            <div id="new-feed-body">
         
 STATUS;
         return $this->status;
@@ -520,7 +523,7 @@ COMMENTS;
             $this->newsfeed.= "</div></div></div></div></div></div><br/>";
         }
 
-        $this->newsfeed.="</div>";
+        $this->newsfeed.="</div></div>";
         return $this->newsfeed;
     }
 

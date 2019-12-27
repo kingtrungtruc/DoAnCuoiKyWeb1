@@ -23,8 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 }
 
+
 // $newsfeed = $user->LoadNewsfeed($_COOKIE['login']);
 $postEntities = $user->SearchPosts($_COOKIE['login'], "");
+
 ?>
 
 <?= $formatHelper->addHeader($_COOKIE['login']) ?>

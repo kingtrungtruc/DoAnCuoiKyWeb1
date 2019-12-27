@@ -830,6 +830,10 @@ class UserController
                 return "Không thể xóa bạn bè, có lỗi xảy ra";
             }
 
+            if(isset($_COOKIE['message_friend_id'])){
+                setcookie('message_friend_id', '', time() - 3600);
+            }
+
             /*Xóa toàn bộ tin nhắn giữa 2 người*/
             $message = new MessageController();
             $messageAll = $message->GetAllMessage($idA, $idB);
