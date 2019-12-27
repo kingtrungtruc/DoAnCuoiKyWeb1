@@ -8,3 +8,4 @@ function _autoload($class)
 }
 
 spl_autoload_register('_autoload');
+?>

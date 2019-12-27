@@ -82,3 +82,4 @@ if (!isset($_COOKIE['login'])) {
     </div>
 <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>
+

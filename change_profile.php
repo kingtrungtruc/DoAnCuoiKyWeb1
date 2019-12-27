@@ -49,3 +49,4 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </div>
 <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>
+

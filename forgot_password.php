@@ -72,3 +72,5 @@ if (isset($_COOKIE['login'])) {
     echo $contentHTML;
     $formatHelper->closeFooter();
 ?>
+
+

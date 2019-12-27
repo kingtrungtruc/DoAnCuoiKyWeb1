@@ -38,3 +38,5 @@ $postEntities = $user->SearchPosts($_COOKIE['login'], "");
 <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
     
 <?= $formatHelper->closeFooter() ?>
+
+

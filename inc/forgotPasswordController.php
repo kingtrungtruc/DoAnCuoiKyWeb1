@@ -152,3 +152,4 @@ class ForgotPasswordController
         return "Có lỗi xảy ra, vui lòng thử lại";
     }
 }
+?>

@@ -50,3 +50,5 @@
 </div>
 <?= $formatHelper->ListFriendIndex($_COOKIE['login']) ?>
 <?= $formatHelper->closeFooter() ?>
+
+
