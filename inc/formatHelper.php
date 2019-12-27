@@ -53,7 +53,7 @@ class FormatHelper
 <html lang="vn">
 <head>
     <title> $realname </title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/ico" href="asset/img/favicon.ico"/>
     <meta charset="utf-8">
     <meta name="username" value="$login">
 
@@ -75,7 +75,7 @@ HEADER;
 <html lang="vn">
 <head>
     <title> $realname </title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/ico" href="asset/img/favicon.ico"/>
     <meta charset="utf-8">
     <meta name="username" value="$login">
     
