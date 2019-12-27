@@ -215,6 +215,7 @@ FIXMENU;
         $usr = $user->GetUser($username);
         $id = $usr['user_id'];
         $name = $usr['user_displayname'];
+        $src_avatar = !empty($usr['user_avatar']) ? 'data:image;base64,'.$usr['user_avatar'] : "asset/img/non-avatar.png"; 
 
         $countFollowing = $user->CountListFriends($username, 'user_following');
         $countFollows = $user->CountListFriends($username, 'user_follows');
@@ -252,6 +253,9 @@ FIXMENU;
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="fix-left-menu">
+                        <div class="text-center">
+                            <img src='$src_avatar' alt="avatar" title='$name' style="width: 150px; height: 150px; border-radius: 75px">  
+                        </div>
                         <h4 class="text-center"><a href="profile.php?id=$id">$name</a></h4>                
                         <ul class="list-group list-group-flush"> 
                             <a href="change_profile.php">

@@ -286,20 +286,24 @@ class UserController
         }
 
         if(!empty($this->request['birthday'])){
-            if(is_numeric($this->request['birthday']) == true){
-                if(is_int($this->request['birthday']) == false){
-                    return "Năm sinh không đúng";
-                }
+            if(is_numeric($this->request['birthday']) == false){
                 return "Năm sinh vừa nhập không phải số";
             }
+            $birthday = (int)$this->request['birthday'];
+            if($birthday == 0 || ((string)$birthday) != $this->request['birthday']){
+                return "Năm sinh không đúng";
+            }
+
             $now = getdate();
-            if($this->request['birthday'] > $now['year']){
+            if($birthday > $now['year']){
+                return "Năm sinh lớn hơn năm hiện tại";
+            }
+            if($birthday <= 0){
+                return "Năm sinh phải là số dương";
+            }
+            if($birthday - $now['year'] > 116){
                 return "Năm sinh không phù hợp";
-            }
-            if($this->request['birthday'] < 0){
-                return "Vui lòng nhập số dương";
-            }
-            $birthday = $this->request['birthday'];
+            }            
         }
 
         // Update real-name
@@ -337,7 +341,7 @@ class UserController
             // prepare string update profile
             $sqlUpdate = "UPDATE users SET user_displayname = ?, user_phone = ?, user_avatar = ?, user_birthday = ? WHERE user_email = ?";
             $data = db::$connection->prepare($sqlUpdate);
-            if ($data->execute([$name, $phone, $img, $username, $birthday])) {
+            if ($data->execute([$name, $phone, $img, $birthday, $username])) {
                 return "Cập nhật thành công";
             }
             return "Cập nhật thất bại, có lỗi xảy ra";
@@ -824,6 +828,13 @@ class UserController
             $data = db::$connection->prepare($sqlUpdate);
             if (!$data->execute([serialize($followedB), serialize($followingB), $userB])) {
                 return "Không thể xóa bạn bè, có lỗi xảy ra";
+            }
+
+            /*Xóa toàn bộ tin nhắn giữa 2 người*/
+            $message = new MessageController();
+            $messageAll = $message->GetAllMessage($idA, $idB);
+            foreach($messageAll as $mess){
+                $message->DeleteMessage($mess['message_id']);
             }
             return "Hủy làm bạn thành công!";
         } catch (PDOException $ex) {

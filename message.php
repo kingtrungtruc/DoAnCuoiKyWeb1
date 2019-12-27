@@ -130,11 +130,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             <form id="chatbox" action="" method="POST">
                 <table border="3" cellpadding="10" style="border-collapse: collapse; margin: 0px auto; width: 395px">
-                    <tr>
+                <tr>
                         <td>
                         <?php
+                            if($id_user_from == -1){
+                        ?>
+                            <input type="text" name="" id="" style="width: 100%"  placeholder="Chưa có bạn bè" autofocus/>
+                            </td>
+
+                        <td style="text-align: center">
+                            <input type="submit" value="Send"/>
+                        </td>
+                        <?php }else{
                             $friend = $user->GetUser('', $id_user_from);
-                            $friendname = $friend['user_displayname'];
+                            $friendname = $friend['user_displayname'];   
                         ?>
                             <input type="text" name="tin_nhan" id="tin_nhan" style="width: 100%"  placeholder="Gửi tin nhắn cho <?= $friendname?>" autofocus/> 
                         </td>
@@ -142,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <td style="text-align: center">
                             <input type="submit" value="Send"/>
                         </td>
+                        <?php } ?>
                     </tr>
                 </table>
             </form>
